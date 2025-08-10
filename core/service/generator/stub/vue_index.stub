@@ -1,0 +1,47 @@
+<template>
+   <page-view>
+      <s-table @register="register">
+         <template #toolbar>
+            <s-button type="primary" icon="plus-outlined" @click="openModal">添加</s-button>
+         </template>
+         <template #bodyCell="{ column, record }">
+            <template v-if="column?.dataIndex === 'action'">
+               <a @click="openModal(true, record.id)">修改</a>
+               <a-divider type="vertical" />
+               <s-confirm-button
+                  label="删除"
+                  title="确认要删除吗?"
+                  @confirm="handleDelete(record.id)"
+               />
+            </template>
+         </template>
+      </s-table>
+      <{NAME}-form @register="registerModal" @save-success="search" />
+   </page-view>
+</template>
+
+<script setup lang="ts">
+import { get{UPPER_CAMEL_NAME}List, destroy } from "@/api/{API_DIR}";
+import {NAME}Form from "./form.vue";
+
+const searchForm = ref([
+{SEARCHCOL}
+]);
+
+const columns = [
+{COLUMNS}
+    {
+        title: "操作",
+        dataIndex: "action",
+    },
+];
+
+const [register, { search, handleDelete }] = useTable({
+   columns,
+   searchForm,
+   listApi: get{UPPER_CAMEL_NAME}List,
+   deleteApi: destroy,
+});
+
+const [registerModal, { openModal }] = useModal();
+</script>

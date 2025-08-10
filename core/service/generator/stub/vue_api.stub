@@ -1,0 +1,50 @@
+import request from '@/utils/request'
+
+
+/**
+ * 获取列表
+ * @param params
+ */
+export function get{UPPER_CAMEL_NAME}List(params:Recordable){
+    return request.get('{ROUTE}', { params })
+}
+
+
+/**
+ * 保存
+ * @param data
+ */
+export function save(data:Recordable) {
+    return request({
+        url: data.id ? `{ROUTE}/${data.id}` : '{ROUTE}',
+        method: data.id ? 'put' : 'post',
+        data: data
+    })
+}
+
+
+/**
+ * 删除
+ * @param id
+ */
+export function destroy(id:string | number) {
+    return request.delete(`{ROUTE}/${id}`)
+}
+
+
+/**
+ * 获取修改的数据
+ * @param id
+ */
+export function getEdit(id:string | number) {
+    return request.get(`{ROUTE}/${id}/edit`)
+}
+
+
+/**
+ * 获取详情的数据
+ * @param id
+ */
+export function read(id:string | number) {
+    return request.get(`{ROUTE}/${id}`)
+}

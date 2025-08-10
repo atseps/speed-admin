@@ -1,0 +1,88 @@
+<?php
+
+{NAMESPACE}
+
+{USE}
+
+class {UPPER_CAMEL_NAME}Service extends {EXTENDS_CONTROLLER}
+{
+
+
+    public function __construct({UPPER_CAMEL_NAME} $model)
+    {
+        $this->model = $model;
+    }
+
+
+
+    /**
+     * 获取列表
+     * @return array
+     */
+    public function getList()
+    {
+        return $this->model->search()->paginate();
+    }
+
+
+
+    /**
+     * 保存
+     * @param array $data
+     * @return int | bool
+     */
+    public function save(array $data)
+    {
+        return $this->model->storeBy($data);
+    }
+
+
+    /**
+     * 更新
+     * @param int $id
+     * @param array $data
+     * @return bool
+     */
+    public function update($id, array $data)
+    {
+        return $this->model->updateBy($id, $data);
+    }
+
+
+    /**
+     * 获取编辑的数据
+     *
+     * @param  int  $id
+     * @return array
+     */
+    public function edit($id)
+    {
+        return $this->model->find($id);
+    }
+    
+
+    /**
+     * 获取详情的数据
+     *
+     * @param  int  $id
+     * @return array
+     */
+    public function read($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+
+    /**
+     * 删除
+     * @param  $id  id主键
+     * @return bool
+     */
+    public function delete($id)
+    {
+        return $this->model->deleteBy($id);
+    }
+
+
+
+}

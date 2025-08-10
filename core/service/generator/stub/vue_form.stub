@@ -1,0 +1,29 @@
+<template>
+   <s-modal-form v-bind="getBindValue">
+{FORM_VIEW}
+   </s-modal-form>
+</template>
+<script lang="ts" setup>
+import { save, getEdit } from "@/api/{API_DIR}";
+
+const form = reactive({
+    {PK}: undefined,
+{FORM_DATA}
+});
+
+const rules = reactive({
+{FORM_VALIDATE}
+});
+
+const getBindValue = computed(() => {
+   return {
+      width: 650,
+      title: '{TABLE_COMMENT}',
+      model: form,
+      saveApi: save,
+      readApi: getEdit,
+      bodyStyle: { padding: "5px" },
+      rules: rules,
+   };
+});
+</script>

@@ -1,0 +1,212 @@
+/**
+ * 全局动画CSS
+ * @global less
+ * @transition {*}
+ */
+.transition-default() {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  }
+
+  &-move {
+    transition: transform 0.4s;
+  }
+}
+
+.expand-transition {
+  .transition-default();
+}
+
+.expand-x-transition {
+  .transition-default();
+}
+
+.collapse-transition {
+  transition: 0.2s height ease-in-out, 0.2s padding-top ease-in-out, 0.2s padding-bottom ease-in-out;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// ///////////////////////////////////////////////
+// fade-slide
+// ///////////////////////////////////////////////
+
+.fade-slide-leave-active,
+.fade-slide-enter-active {
+  transition: all 0.2s;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+// ///////////////////////////////////////////////
+// fade-bottom
+// ///////////////////////////////////////////////
+
+// Speed: 1x
+.fade-bottom-enter-active,
+.fade-bottom-leave-active {
+  transition: opacity 0.25s, transform 0.3s;
+}
+
+.fade-bottom-enter-from {
+  opacity: 0%;
+  transform: translateY(-10%);
+}
+
+.fade-bottom-leave-to {
+  opacity: 0%;
+  transform: translateY(10%);
+}
+
+// ///////////////////////////////////////////////
+// fade-scale
+// ///////////////////////////////////////////////
+.fade-scale-leave-active,
+.fade-scale-enter-active {
+  transition: all 0.28s;
+}
+
+.fade-scale-enter-from {
+  opacity: 0%;
+  transform: scale(1.2);
+}
+
+.fade-scale-leave-to {
+  opacity: 0%;
+  transform: scale(0.8);
+}
+
+// ///////////////////////////////////////////////
+// fade-top
+// ///////////////////////////////////////////////
+
+// Speed: 1x
+.fade-top-enter-active,
+.fade-top-leave-active {
+  transition: opacity 0.2s, transform 0.25s;
+}
+
+.fade-top-enter-from {
+  opacity: 0%;
+  transform: translateY(8%);
+}
+
+.fade-top-leave-to {
+  opacity: 0%;
+  transform: translateY(-8%);
+}
+
+.slide-y-transition {
+  .transition-default();
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0%;
+    transform: translateY(-15px);
+  }
+}
+
+.slide-y-reverse-transition {
+  .transition-default();
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0%;
+    transform: translateY(15px);
+  }
+}
+
+.slide-x-transition {
+  .transition-default();
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0%;
+    transform: translateX(-15px);
+  }
+}
+
+.slide-x-reverse-transition {
+  .transition-default();
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0%;
+    transform: translateX(15px);
+  }
+}
+
+// ///////////////////////////////////////////////
+// zoom-fade
+// ///////////////////////////////////////////////
+.zoom-fade-enter-active,
+.zoom-fade-leave-active {
+  transition: transform 0.2s, opacity 0.3s ease-out;
+}
+
+.zoom-fade-enter-from {
+  opacity: 0%;
+  transform: scale(0.92);
+}
+
+.zoom-fade-leave-to {
+  opacity: 0%;
+  transform: scale(1.06);
+}
+
+// ///////////////////////////////////////////////
+// breadcrumb
+// ///////////////////////////////////////////////
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.2s;
+}
+
+.breadcrumb-enter-from,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all 0.5s;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}
+
+// ///////////////////////////////////////////////
+// fade-transform
+// ///////////////////////////////////////////////
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all 0.5s;
+}
+
+.fade-transform-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

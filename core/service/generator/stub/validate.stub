@@ -1,0 +1,19 @@
+<?php
+
+{NAMESPACE}
+
+use core\base\BaseValidate;
+
+class {UPPER_CAMEL_NAME}Validate extends BaseValidate
+{
+
+
+    protected $rule = [
+{RULE}
+    ];
+
+
+    public $field = [
+{FILED_NAME}
+    ];
+}

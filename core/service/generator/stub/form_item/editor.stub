@@ -1,0 +1,3 @@
+<a-form-item label="{COLUMN_COMMENT}" name="{COLUMN_NAME}">
+    <s-editor v-model="form.{COLUMN_NAME}" :height="500" />
+</a-form-item>

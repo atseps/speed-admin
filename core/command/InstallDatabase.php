@@ -61,7 +61,7 @@ class InstallDatabase extends Command
             $this->verifyInstallation($config);
 
             // 完成
-            $output->writeln("\n<info>数据库安装成功！</info>");
+            $output->writeln("\n<info>数据初始化成功！</info>");
             $output->writeln("<info>默认管理员账号：admin</info>");
             $output->writeln("<info>默认管理员密码：123456</info>");
             return 0;

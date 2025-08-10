@@ -54,77 +54,77 @@ class BaseValidate extends Validate
     }
     
 
-    // /**
-    //  * 重写unique方法，验证是否唯一，支持复杂条件验证
-    //  * @access public
-    //  * @param mixed  $value 字段值
-    //  * @param mixed  $rule  验证规则 格式：数据表,字段名,排除ID,主键名
-    //  * @param array  $data  数据
-    //  * @param string $field 验证字段名
-    //  * @return bool
-    //  */
-    // public function unique($value, $rule, array $data = [], string $field = ''): bool
-    // {
-    //     if (is_string($rule)) {
-    //         $rule = explode(',', $rule);
-    //     }
+    /**
+     * 重写unique方法，验证是否唯一，支持复杂条件验证
+     * @access public
+     * @param mixed  $value 字段值
+     * @param mixed  $rule  验证规则 格式：数据表,字段名,排除ID,主键名
+     * @param array  $data  数据
+     * @param string $field 验证字段名
+     * @return bool
+     */
+    public function unique($value, $rule, array $data = [], string $field = ''): bool
+    {
+        if (is_string($rule)) {
+            $rule = explode(',', $rule);
+        }
 
-    //     if (false !== strpos($rule[0], '\\')) {
-    //         // 指定模型类
-    //         $db = new $rule[0];
-    //     } else {
-    //         $db = $this->db->name($rule[0]);
-    //     }
+        if (false !== strpos($rule[0], '\\')) {
+            // 指定模型类
+            $db = new $rule[0];
+        } else {
+            $db = $this->db->name($rule[0]);
+        }
 
-    //     $key = $rule[1] ?? $field;
-    //     $map = [];
+        $key = $rule[1] ?? $field;
+        $map = [];
 
-    //     if (strpos($key, '^')) {
-    //         // 支持多个字段验证
-    //         $fields = explode('^', $key);
-    //         foreach ($fields as $key) {
-    //             if (isset($data[$key])) {
-    //                 $map[] = [$key, '=', $data[$key]];
-    //             }
-    //         }
-    //     }elseif (strpos($key, '=')) {
-    //         //支持复杂验证条件
-    //         $fields = explode('&', $key);
-    //         $map_arr=[];
-    //         foreach ($fields as $k) {
-    //             //判断验证条件是否传参，没有传参就使用$data中对应的值
-    //             if (strpos($k, '=')) {
-    //                 $str_map = explode('=', $k);
-    //                 $map[] = [$str_map[0], '=', $str_map[1]];
-    //                 $map_arr[]=$str_map[0];
-    //             }else{
-    //                 $map[] = [$k, '=', $data[$k]];
-    //                 $map_arr[]=$k;
-    //             }
-    //         }
-    //         if(!in_array($field, $map_arr)){
-    //             $map[] = [$field, '=', $data[$field]];
-    //         }
-    //    } elseif (isset($data[$field])) {
-    //         $map[] = [$key, '=', $data[$field]];
-    //     } else {
-    //         $map = [];
-    //     }
-    //     $pk = !empty($rule[3]) ? $rule[3] : $db->getPk();
+        if (strpos($key, '^')) {
+            // 支持多个字段验证
+            $fields = explode('^', $key);
+            foreach ($fields as $key) {
+                if (isset($data[$key])) {
+                    $map[] = [$key, '=', $data[$key]];
+                }
+            }
+        }elseif (strpos($key, '=')) {
+            //支持复杂验证条件
+            $fields = explode('&', $key);
+            $map_arr=[];
+            foreach ($fields as $k) {
+                //判断验证条件是否传参，没有传参就使用$data中对应的值
+                if (strpos($k, '=')) {
+                    $str_map = explode('=', $k);
+                    $map[] = [$str_map[0], '=', $str_map[1]];
+                    $map_arr[]=$str_map[0];
+                }else{
+                    $map[] = [$k, '=', $data[$k]];
+                    $map_arr[]=$k;
+                }
+            }
+            if(!in_array($field, $map_arr)){
+                $map[] = [$field, '=', $data[$field]];
+            }
+       } elseif (isset($data[$field])) {
+            $map[] = [$key, '=', $data[$field]];
+        } else {
+            $map = [];
+        }
+        $pk = !empty($rule[3]) ? $rule[3] : $db->getPk();
 
-    //     if (is_string($pk)) {
-    //         if (isset($rule[2])) {
-    //             $map[] = [$pk, '<>', $rule[2]];
-    //         } elseif (isset($data[$pk])) {
-    //             $map[] = [$pk, '<>', $data[$pk]];
-    //         }
-    //     }
-    //     if ($db->where($map)->field($pk)->find()) {
-    //         return false;
-    //     }
+        if (is_string($pk)) {
+            if (isset($rule[2])) {
+                $map[] = [$pk, '<>', $rule[2]];
+            } elseif (isset($data[$pk])) {
+                $map[] = [$pk, '<>', $data[$pk]];
+            }
+        }
+        if ($db->where($map)->field($pk)->find()) {
+            return false;
+        }
 
-    //     return true;
-    // }
+        return true;
+    }
 
 
 

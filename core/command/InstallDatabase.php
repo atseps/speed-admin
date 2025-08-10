@@ -30,7 +30,7 @@ class InstallDatabase extends Command
 
         try {
             // 1. 检查数据库连接
-            $output->writeln("\n<comment>[1/3] 检查MySQL服务器连接...</comment>");
+            $output->writeln("\n<comment>[1/3] 检查MySQL服务器...</comment>");
             $this->checkMysqlConnection($config);
             $output->writeln('<info>✓ MySQL服务器连接正常</info>');
 
@@ -62,6 +62,8 @@ class InstallDatabase extends Command
 
             // 完成
             $output->writeln("\n<info>数据库安装成功！</info>");
+            $output->writeln("<info>默认管理员账号：admin</info>");
+            $output->writeln("<info>默认管理员密码：123456</info>");
             return 0;
         } catch (\Exception $e) {
             $output->writeln("\n<error>安装失败: " . $e->getMessage() . "</error>");

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="102" height="124" viewBox="0 0 102 124" fill="none">
+<g opacity="0.8">
+<path d="M60 4L100 43.9996L100 110C100 117.732 93.732 124 86 124L14 124C6.268 124 0 117.732 0 110L0 18.0004C0 10.2676 6.268 4 14 4L60 4Z"   fill="url(#linear_fill_4C986A5E-BCDF-47CC-894E-BC57C88F5ADE)" >
+</path>
+</g>
+<g filter="url(#filter_F3266215-B6FE-4A9F-96C7-8D2028FD6865)">
+<path d="M100 44L74.7072 44C66.9752 44 60 37.0248 60 29.2928L60 4L100 44Z"   fill="#FFFFFF" fill-opacity="0.4">
+</path>
+</g>
+<g opacity="0.99">
+<path d="M51.0162 75.0894L51.0162 82.8736L65.4368 91.4752L65.4368 66.5106L51.0162 75.0894Z"   fill="#FFFFFF" >
+</path>
+</g>
+<g opacity="0.99">
+<path   fill-rule="evenodd"  fill="#FFFFFF"  d="M20.0178 66.6742C20.0178 65.1942 21.2178 64.0142 22.6778 64.0142L52.7878 64.0142C54.2678 64.0142 55.4478 65.1942 55.4678 66.6442L55.4678 91.3342C55.4678 92.8142 54.2678 93.9942 52.8078 93.9942L22.6778 93.9942C21.1978 93.9942 20.0178 92.7942 20.0178 91.3342L20.0178 66.6742ZM31.5088 88.298L31.5088 69.688L46.6788 78.988L31.5088 88.298Z">
+</path>
+</g>
+<defs>
+<linearGradient id="linear_fill_4C986A5E-BCDF-47CC-894E-BC57C88F5ADE" x1="50" y1="4" x2="50" y2="124" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#627CFE"  />
+<stop offset="1" stop-color="#3042CC"  />
+</linearGradient>
+<filter id="filter_F3266215-B6FE-4A9F-96C7-8D2028FD6865" x="58" y="0" width="44" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="feFloodId_F3266215-B6FE-4A9F-96C7-8D2028FD6865"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha_F3266215-B6FE-4A9F-96C7-8D2028FD6865"/>
+<feOffset dx="0" dy="-2"/>
+<feGaussianBlur stdDeviation="1"/>
+<feComposite in2="hardAlpha_F3266215-B6FE-4A9F-96C7-8D2028FD6865" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.09 0"/>
+<feBlend mode="normal" in2="feFloodId_F3266215-B6FE-4A9F-96C7-8D2028FD6865" result="dropShadow_1_F3266215-B6FE-4A9F-96C7-8D2028FD6865"/>
+<feBlend mode="normal" in="SourceGraphic" in2="dropShadow_1_F3266215-B6FE-4A9F-96C7-8D2028FD6865" result="shape_F3266215-B6FE-4A9F-96C7-8D2028FD6865"/>
+</filter>
+</defs>
+</svg>

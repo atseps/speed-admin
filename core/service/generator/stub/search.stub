@@ -1,0 +1,4 @@
+   
+    public function search{UPPER_CAMEL_NAME}Attr($query, $value){
+        $query->where('{FIELD}','{SEARCH_TYPE}',{VALUE});
+    }

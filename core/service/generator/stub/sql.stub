@@ -1,0 +1,23 @@
+
+INSERT INTO `{MENU_TABLE}`(`pid`, `type`, `path`, `component`, `title`) VALUES ({PID},0,'{PATH_NAME}','{COMPONENT_NAME}','{MENU_NAME}');
+
+SELECT @pid := LAST_INSERT_ID();
+INSERT INTO `speed_auth_access` SET `menu_id` = @pid , `role_id` = 1;
+
+INSERT INTO `{MENU_TABLE}`(`pid`, `type`,`rules`, `title`) VALUES (@pid,2,'{RULES}:index','列表');
+SELECT @menuid := LAST_INSERT_ID();
+INSERT INTO `speed_auth_access` SET `menu_id` = @menuid , `role_id` = 1;
+
+
+INSERT INTO `{MENU_TABLE}`(`pid`, `type`,`rules`, `title`) VALUES (@pid,2,'{RULES}:save','添加');
+SELECT @menuid := LAST_INSERT_ID();
+INSERT INTO `speed_auth_access` SET `menu_id` = @menuid , `role_id` = 1;
+
+
+INSERT INTO `{MENU_TABLE}`(`pid`, `type`,`rules`, `title`) VALUES (@pid,2,'{RULES}:update','编辑');
+SELECT @menuid := LAST_INSERT_ID();
+INSERT INTO `speed_auth_access` SET `menu_id` = @menuid , `role_id` = 1;
+
+INSERT INTO `{MENU_TABLE}`(`pid`, `type`,`rules`, `title`) VALUES (@pid,2,'{RULES}:delete','删除');
+SELECT @menuid := LAST_INSERT_ID();
+INSERT INTO `speed_auth_access` SET `menu_id` = @menuid , `role_id` = 1;

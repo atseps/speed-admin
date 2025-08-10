@@ -1,0 +1,172 @@
+body {
+  #app {
+    height: 100%;
+  }
+
+  //基础布局样式
+  .basic-layout {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--spe-layout-bg-color);
+    .layout-content {
+      position: relative;
+    }
+  }
+
+  .ant-layout-left,
+  .ant-layout-mix {
+    .layout-header {
+      z-index: 11;
+    }
+  }
+
+  //侧边栏样式
+  .ant-pro-sider {
+    z-index: 10;
+
+    .ant-layout-sider-children {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
+
+  //优化菜单样式
+  .ant-menu-horizontal {
+    border-bottom-color: transparent;
+  }
+
+  .ant-menu-inline {
+    border-right-color: transparent !important;
+  }
+
+  //切换布局去掉动画
+  .ant-menu-title-content span {
+    transition: none !important;
+  }
+
+  .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+    background: transparent;
+  }
+
+  .ant-table-thead > tr > th {
+    font-weight: 500 !important;
+  }
+}
+
+//亮色主题
+.ant-theme-light {
+  .ant-pro-sider {
+    background-color: #fff;
+  }
+  .logo h1 {
+    color: var(--ant-color-primary);
+  }
+}
+.drawer-sider .ant-pro-sider {
+  border-right: none;
+}
+
+.ant-layout-sider-dark {
+  background: var(--spe-sider-bg-color);
+}
+
+//混合菜单布局
+.ant-layout-mix .ant-pro-sider {
+  background-color: var(--ant-color-bg-container);
+}
+
+//暗黑模式
+html[data-theme="dark"] {
+  //滚动条
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  ::-ms-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  //菜单和头部
+  .ant-menu-dark .ant-menu-inline.ant-menu-sub,
+  .ant-layout-sider-dark,
+  .layout-header {
+    background: var(--ant-color-bg-container);
+  }
+
+  .ant-pro-sider-links {
+    border-top: 1px solid var(--ant-color-border-secondary);
+  }
+
+  .ant-modal-root .ant-modal-mask {
+    background-color: rgb(0 0 0 / 0.65);
+  }
+
+  //暗黑模式的分页样式
+  .ant-table-wrapper .ant-pagination-mini {
+    .ant-pagination-prev,
+    .ant-pagination-next,
+    .ant-pagination-item:not(.ant-pagination-item-active) {
+      background-color: transparent;
+    }
+  }
+
+  // wang编辑器
+  --w-e-textarea-bg-color: var(--ant-color-bg-container);
+  --w-e-textarea-color: var(--ant-color-text-quaternary);
+  --w-e-toolbar-bg-color: var(--ant-color-bg-container);
+  --w-e-toolbar-border-color: var(--ant-color-border);
+  --w-e-textarea-border-color: var(--ant-color-border);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .basic-modal .ant-modal-body .scrollbar .ant-card {
+    background: transparent;
+  }
+
+  --spe-layout-border-color: var(--ant-color-border-secondary);
+
+  .hljs {
+    color: #d1d1d1;
+    background: var(--ant-color-bg-container);
+  }
+  .hljs-string {
+    color: #e5e5e5;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2147483646;
+}
+
+[data-theme="dark"]::view-transition-old(root) {
+  z-index: 2147483646;
+}
+
+[data-theme="dark"]::view-transition-new(root) {
+  z-index: 1;
+}

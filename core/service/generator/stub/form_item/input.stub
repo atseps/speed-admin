@@ -1,0 +1,1 @@
+<s-input label="{COLUMN_COMMENT}" name="{COLUMN_NAME}" v-model="form.{COLUMN_NAME}" placeholder="请输入{COLUMN_COMMENT}" />

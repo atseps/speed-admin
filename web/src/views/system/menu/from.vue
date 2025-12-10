@@ -135,7 +135,7 @@
 <script lang="ts" setup>
 import { save } from "@/api/system/menu";
 import { isURL } from "@/utils/is";
-import type { RuleObject } from 'ant-design-vue/es/form';
+import type { RuleObject } from 'ant-design-vue/lib/form';
 import type { TreeData } from './index.vue';
 
 interface Option {

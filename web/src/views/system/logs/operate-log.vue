@@ -129,6 +129,10 @@ const searchForm = ref([
     }
   },
   {
+    title: "IP地址",
+    dataIndex: "ip"
+  },
+  {
     title: "操作时间",
     dataIndex: "create_time",
     component: "RangePicker"

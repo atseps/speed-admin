@@ -15,4 +15,10 @@ trait OperateLogSearch
     public function searchCreateTimeAttr($query, $value){
         $query->whereTime('create_time', 'between', between_time($value));
     }
+    
+    //ip
+    public function searchIpAttr($query, $value)
+    {
+        $query->whereLike('ip', $value);
+    }
 }

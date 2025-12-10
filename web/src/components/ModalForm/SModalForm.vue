@@ -93,6 +93,10 @@ const props = defineProps(
     //栅格布局配置
     layoutGrid: {
       type: Object as PropType<LayoutGrid>
+    },
+    beforeSetFormValue: {
+      type: Function as PropType<(data: Recordable) => Recordable>,
+      default: null
     }
   })
 );
@@ -158,8 +162,22 @@ const [register, { changeLoading, closeModal, changeOkLoading }] = useModalInner
   }
 );
 
+
+const transformBeforeSet = (data: Recordable): Recordable => {
+  let result = cloneDeep(data);
+  if (props.beforeSetFormValue && isFunction(props.beforeSetFormValue)) {
+    const transformed = props.beforeSetFormValue(result);
+    if (isObject(transformed)) {
+      result = transformed;
+    }
+  }
+  return result;
+};
+
 const setFormValue = (data: Recordable) => {
-  const formModel = pick(data, keys(props.model));
+  // 允许在赋值前对数据进行转换
+  const processedData = transformBeforeSet(data);
+  const formModel = pick(processedData, keys(props.model));
   Object.assign(props.model, formModel);
   emit("setFormValue", formModel);
 };

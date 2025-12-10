@@ -104,6 +104,13 @@ const handleCreated = (editor: IDomEditor) => {
   z-index: 99;
   border-radius: var(--ant-border-radius);
 }
+
+:global(.w-e-full-screen-container .w-e-toolbar) {
+    border-radius: 0 !important;
+}
+:global(.w-e-full-screen-container .w-e-text-container) {
+    border-radius: 0 !important;
+}
 :deep(.w-e-toolbar),
 :deep(.w-e-text-container) {
   border-radius: var(--ant-border-radius);

@@ -2,7 +2,13 @@
   <page-view>
     <s-table @register="register">
       <template #toolbar>
-        <s-button type="primary" icon="delete-outlined" v-auth="'system:loginLog:clear'" @click="clear">清空</s-button>
+        <s-button
+          type="primary"
+          icon="delete-outlined"
+          v-auth="'system:loginLog:clear'"
+          @click="clear"
+          >清空</s-button
+        >
         <s-button
           v-if="selectRowKeysLength"
           icon="delete-outlined"
@@ -64,18 +70,28 @@ const columns: TableColumnProps[] = [
 
 const searchForm = [
   {
-    title: "登录账号",
     dataIndex: "account",
+    component: "CompactSelect",
     props: {
-      placeholder: "请输入登录账号搜索"
+      defaultField: "account",
+      type: "input",
+      options: [
+        {
+          label: "登录账号",
+          value: "account",
+          placeholder: "请输入登录账号搜索"
+        },
+        {
+          label: "用户姓名",
+          value: "realname",
+          placeholder: "请输入用户姓名搜索"
+        }
+      ]
     }
   },
   {
-    title: "用户姓名",
-    dataIndex: "realname",
-    props: {
-      placeholder: "请输入用户姓名搜索"
-    }
+    title: "登录IP",
+    dataIndex: "login_ip"
   },
   {
     title: "登录时间",
@@ -93,8 +109,7 @@ const [register, { refresh, handleDelete, selectRowKeysLength }] = useTable({
   debounceRender: false,
   showAction: false,
   canResize: true,
-
-  searchSpan:6
+  searchSpan: 6
 });
 
 const clear = () => {

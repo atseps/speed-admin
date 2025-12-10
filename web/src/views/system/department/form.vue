@@ -12,14 +12,14 @@
     <a-form-item label="负责人" name="leader_id">
       <s-select-user v-model="form.leader_id" placeholder="请选择部门负责人" />
     </a-form-item>
-    <s-input-number label="排序" v-model="form.sort"  max="9999" placeholder="请输入排序" />
+    <s-input-number label="排序" v-model="form.sort" max="9999" placeholder="请输入排序" />
   </s-modal-form>
 </template>
 <script lang="ts" setup>
 import { save, getEdit } from "@/api/system/department";
 
 export interface TreeData {
-  id?: number;
+  id: number;
   value: number;
   title: string;
   children: TreeData[];
@@ -49,7 +49,7 @@ const props = defineProps({
 
 const handleTree = (value: TreeData[]) => {
   data.value = [];
-  const treeData: TreeData = { value: 0, title: "顶级部门", children: [] };
+  const treeData: TreeData = { id: 0, value: 0, title: "顶级部门", children: [] };
   treeData.children = value;
   data.value.push(treeData);
 };
@@ -71,7 +71,7 @@ const getBindValue = computed(() => {
     model: form,
     saveApi: save,
     readApi: getEdit,
-    labelWidth: '90px',
+    labelWidth: "90px",
     bodyStyle: { padding: "20px" },
     rules: rules
   };

@@ -35,6 +35,12 @@ class LoginLog extends BaseModel
         $query->whereIn('user_id', $user_id);
     }
 
+    //登录IP
+    public function searchLoginIpAttr($query, $value)
+    {
+        $query->whereLike('login_ip', $value);
+    }
+
 
     //操作时间
     public function searchLoginTimeAttr($query, $value)

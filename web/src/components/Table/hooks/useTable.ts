@@ -53,7 +53,7 @@ export function useTable(
   };
 
   //删除
-  const handleDelete = async (id?: Array<string | number> | number | string, failRefresh: boolean = false) => {
+  const handleDelete = async (id?: Array<string | number> | number | string, failRefresh = true) => {
     const { deleteApi } = tableProps;
     if (!deleteApi) return;
     const rowkey = id && (isArray(id) || !isNaN(Number(id))) ? id : getTableInstance().getSelectRowKeys();

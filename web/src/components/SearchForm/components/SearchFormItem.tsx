@@ -106,7 +106,10 @@ const SearchFormItem = defineComponent({
         propsData.presets = presets;
       }
       if (component == "Select") {
-        propsData.placeholder = propsData?.placeholder || "请选择";
+        propsData.placeholder = propsData?.placeholder || `请选择${props.title}搜索`;
+      }
+      if (component == "Input") {
+        propsData.placeholder = propsData?.placeholder || `请输入${props.title}搜索`;
       }
       if (component == "CompactSelect") {
         return <Comp presets={presets} {...props.props} model={model}></Comp>;

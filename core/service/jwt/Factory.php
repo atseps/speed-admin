@@ -13,7 +13,7 @@ class Factory
         return app(JwtAuth::class, [
             'config' => self::getConfig($name),
             'scene'  => $name
-        ]);
+        ],true);
     }
 
 

@@ -8,6 +8,7 @@
       :style="{ height: getHeight,'overflow-y':'hidden' }"
       @onCreated="handleCreated"
     />
+    <UploadDialog @register="registerUploadDialog" @ok="handleUploadOk" accept="image/*" />
   </div>
 </template>
 
@@ -16,6 +17,8 @@ import "@wangeditor/editor/dist/css/style.css";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { Form } from "ant-design-vue";
 import type { IDomEditor } from "@wangeditor/editor";
+import UploadDialog from "@/components/Upload/components/UploadDialog.vue";
+import { useModal } from "@/components/Modal";
 const formItemContext = Form.useInjectFormItemContext();
 type InsertFnType = (url: string, alt: string, href: string) => void;
 const props = defineProps({
@@ -42,6 +45,10 @@ const getHeight = computed(() => {
 });
 
 const emit = defineEmits(["update:modelValue", "uploadImgFromMedia"]);
+
+const [registerUploadDialog, { openModal: openUploadModal }] = useModal();
+
+let currentInsertFn: InsertFnType | null = null;
 
 const value = computed({
   get() {
@@ -77,8 +84,8 @@ const editorConfig = {
   MENU_CONF: {
     uploadImage: {
       customBrowseAndUpload(insertFn: InsertFnType) {
-        // TS 语法
-        emit("uploadImgFromMedia", insertFn);
+        currentInsertFn = insertFn;
+        openUploadModal(true, insertFn);
       }
     }
   },
@@ -95,6 +102,18 @@ onBeforeUnmount(() => {
 // 编辑器回调函数
 const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor; // 记录 editor 实例！
+};
+
+const handleUploadOk = (fileList: Recordable[]) => {
+  if (!currentInsertFn || !fileList.length) return;
+  const insertFn = currentInsertFn;
+  fileList.forEach(file => {
+    const url = file.url || file.src;
+    if (url) {
+      insertFn(url, file.name || "", "");
+    }
+  });
+  currentInsertFn = null;
 };
 </script>
 <style lang="less" scoped>

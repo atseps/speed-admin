@@ -17,6 +17,7 @@
         class="upload-dragger"
         :fileList="state.fileList"
         :beforeUpload="beforeUpload"
+        :accept="accept"
         name="file"
         multiple
       >
@@ -55,6 +56,13 @@ const { message } = useMessage();
 
 const [register, { closeModal }] = useModalInner();
 
+const props = defineProps({
+  accept: {
+    type: String,
+    default: ""
+  }
+});
+
 const state = reactive({
   fileList: [] as FileItem[],
   visible: false,
@@ -64,7 +72,18 @@ const state = reactive({
 
 const emit = defineEmits(["ok", "register", "remove"]);
 
+const acceptsImages = computed(() => {
+  if (!props.accept) return false;
+  const accept = props.accept.toLowerCase();
+  const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+  return imageExts.some(ext => accept.includes(ext)) || accept.includes('image');
+});
+
 const beforeUpload: UploadProps["beforeUpload"] = async (file: File) => {
+  if (acceptsImages.value && !checkImgType(file)) {
+    message.warning("仅支持上传图片文件");
+    return false;
+  }
   const { size, name } = file;
   const commonItem = {
     uid: buildUUID(),

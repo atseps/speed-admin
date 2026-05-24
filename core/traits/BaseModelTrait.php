@@ -88,11 +88,14 @@ trait BaseModelTrait {
         $newData = [];
         foreach ($data as $item) {
             foreach ($item as $field => $value) {
-                if (!in_array($field, $this->field)) {
+                if (!in_array($field, $this->getTableFields())) {
                     unset($item[$field]);
                 }
-                if (in_array('create_time', $this->field)) {
+                if (in_array('create_time', $this->getTableFields())) {
                     $item['create_time'] = time();
+                }
+                if (in_array('update_time', $this->getTableFields())) {
+                    $item['update_time'] = time();
                 }
             }
             $newData[] = $item;

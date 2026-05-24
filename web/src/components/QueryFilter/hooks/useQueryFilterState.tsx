@@ -5,7 +5,7 @@ import { cloneElement } from "ant-design-vue/es/_util/vnode";
 import { isValidElement } from "ant-design-vue/es/_util/props-util";
 import type { QueryFilterProps } from "../types";
 import type { default as QueryFilter } from "../QuertFilter";
-import { BaseFromInstance } from "@ant-design-vue/pro-form";
+import { BaseFromInstance } from "../components/BaseForm/types";
 import { getSpanConfig } from "../components/form-action/utils";
 
 export type UseTableFormStateParams = {

@@ -134,9 +134,9 @@ class BasisQuery extends Query
      * @param string $logic
      * @return Query
      */
-    public function whereLeftLike(string $field, $condition, string $logic = 'AND'): Query
+    public function whereLeftLike(string $field, string $condition, string $logic = 'AND'): Query
     {
-        return $this->where($field, $condition, $logic, 'left');
+        return $this->whereLike($field, $condition, $logic, 'left');
     }
 
 
@@ -147,9 +147,9 @@ class BasisQuery extends Query
      * @param string $logic
      * @return Query
      */
-    public function whereRightLike(string $field, $condition, string $logic = 'AND'): Query
+    public function whereRightLike(string $field, string $condition, string $logic = 'AND'): Query
     {
-        return $this->where($field, $condition, $logic, 'right');
+        return $this->whereLike($field, $condition, $logic, 'right');
     }
 
 
@@ -157,9 +157,9 @@ class BasisQuery extends Query
     /**
      * 重写分页,自动获取每页数量
      *
-     * @param  number   $listRows 每页显示多少数据
+     * @param  int   $listRows 每页显示多少数据
      * @param  boolean  $simple   是否简洁分页
-     * @param  int  $maxRows      每页最多查询的数据
+     * @param  int  $pageSizeMax      每页最多查询的数据
      * @return Paginator
      */
     public function paginate($listRows = null, $simple = false, $pageSizeMax = null): Paginator

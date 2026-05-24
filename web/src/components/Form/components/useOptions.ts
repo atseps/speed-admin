@@ -1,7 +1,7 @@
 import { isFunction, isEmpty } from "@/utils/is";
-import { get, omit,isEqual } from "lodash-es";
+import { get, omit, isEqual } from "lodash-es";
 type OptionsItem = { label: string; value: string; disabled?: boolean };
-type Emit = (event: 'options-change', options: OptionsItem[]) => void
+type Emit = (event: "options-change", options: OptionsItem[]) => void;
 type PropsType = {
   api?: (...arg: any[]) => Promise<any>;
   params: Recordable;
@@ -13,8 +13,8 @@ type PropsType = {
   immediate: boolean;
   alwaysLoad: boolean;
   options?: any;
-}
-export default function useOptions(props: PropsType, emit:Emit) {
+};
+export default function useOptions(props: PropsType, emit: Emit) {
   const options = ref<OptionsItem[]>([]);
   const loading = ref(false);
 
@@ -41,10 +41,9 @@ export default function useOptions(props: PropsType, emit:Emit) {
     }, [] as OptionsItem[]);
   });
 
-
   watch(
     () => props.options,
-    (value) => {
+    value => {
       if (value && value.length > 0) {
         options.value = value;
       }
@@ -63,8 +62,8 @@ export default function useOptions(props: PropsType, emit:Emit) {
       loading.value = true;
       const res = await api(props.params);
       isFirstLoaded.value = true;
-      if (Array.isArray(res)) {
-        options.value = res;
+      if (Array.isArray(res.data)) {
+        options.value = res.data;
         emitChange();
         return;
       }
@@ -82,13 +81,11 @@ export default function useOptions(props: PropsType, emit:Emit) {
 
   watch(
     () => props.params,
-     (value, oldValue) => {
+    (value, oldValue) => {
       if (isEqual(value, oldValue)) return;
       fetch();
     },
-    { deep: true,
-      immediate: props.immediate
-    },
+    { deep: true, immediate: props.immediate }
   );
 
   const handleFetch = async (visible: boolean) => {

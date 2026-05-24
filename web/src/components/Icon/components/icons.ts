@@ -64,7 +64,7 @@ export default [
       "radius-bottomright-outlined",
       "radius-upleft-outlined",
       "fullscreen-outlined",
-      "fullscreen-exit"
+      "fullscreen-exit-outlined"
     ]
   },
   {
@@ -94,7 +94,7 @@ export default [
       "clock-circle-outlined",
       "warning-outlined",
       "issues-close-outlined",
-      "stop"
+      "stop-outlined"
     ]
   },
   {
@@ -134,7 +134,7 @@ export default [
       "unordered-list-outlined",
       "radius-setting-outlined",
       "column-width-outlined",
-      "column-height"
+      "column-height-outlined"
     ]
   },
   {
@@ -153,7 +153,7 @@ export default [
       "stock-outlined",
       "box-plot-outlined",
       "fund-outlined",
-      "sliders"
+      "sliders-outlined"
     ]
   },
   {
@@ -376,7 +376,7 @@ export default [
       "alibaba-outlined",
       "yahoo-outlined",
       "reddit-outlined",
-      "sketch"
+      "sketch-outlined"
     ]
   }
 ];

@@ -7,6 +7,7 @@
     :title="getTitle"
     :width="width"
     @ok="onSubmit"
+    @visible-change="onVisibleChange"
   >
     <a-form v-bind="getFormProps" ref="formRef" :labelCol="getLabelCol">
       <a-card :body-style="bodyStyleRef" :bordered="false">
@@ -27,10 +28,11 @@ const emit = defineEmits([
   "finishFailed",
   "ok",
   "finish",
-  "register",
   "loadSuccess",
   "saveSuccess",
-  "setFormValue"
+  "setFormValue",
+  "register",
+  "visible-change"
 ]);
 
 type LayoutGrid = {
@@ -109,6 +111,14 @@ onMounted(() => {
   initModel.value = cloneDeep(props.model);
 });
 
+
+const onVisibleChange = async (visible: boolean) => {
+  if (visible) {
+    await nextTick();
+  }
+  emit("visible-change", visible, unref(isEdit));
+};
+
 const bodyStyleRef = computed(() => {
   const { layoutGrid, bodyStyle } = props;
   const style = {
@@ -135,16 +145,19 @@ const getFormProps = computed(() => {
   return { ...omit(props, exclude) };
 });
 
+const isValidId = (val: unknown): boolean => {
+  const num = typeof val === 'number' ? val : Number(val);
+  return Number.isFinite(num) && num > 0;
+};
+
+const isEdit = computed(() => {
+  const rec = unref(record);
+  return isValidId(rec) || (isObject(rec) ? isValidId((rec)[props.dataKey]): false);
+});
+
 const getTitle = computed(() => {
-  const { title, readApi, dataKey, modalTitle } = props;
-  if (modalTitle) return modalTitle;
-  let headTitle = `添加${title}`;
-  if (readApi && unref(record) && !isNaN(record.value)) {
-    headTitle = `修改${title}`;
-  } else if (unref(record) && unref(record)[dataKey]) {
-    headTitle = `修改${title}`;
-  }
-  return headTitle;
+  if (props.modalTitle) return props.modalTitle;
+  return isEdit.value ? `修改${props.title}` : `添加${props.title}`;
 });
 
 const [register, { changeLoading, closeModal, changeOkLoading }] = useModalInner(
@@ -162,24 +175,27 @@ const [register, { changeLoading, closeModal, changeOkLoading }] = useModalInner
   }
 );
 
-
-const transformBeforeSet = (data: Recordable): Recordable => {
-  let result = cloneDeep(data);
+const beforeSetFormValueFn = (data: Recordable): Recordable => {
+  let formData = cloneDeep(data);
   if (props.beforeSetFormValue && isFunction(props.beforeSetFormValue)) {
-    const transformed = props.beforeSetFormValue(result);
-    if (isObject(transformed)) {
-      result = transformed;
+    const result = props.beforeSetFormValue(formData);
+    if (isObject(result)) {
+      formData = result;
     }
   }
-  return result;
+  return formData;
 };
 
 const setFormValue = (data: Recordable) => {
-  // 允许在赋值前对数据进行转换
-  const processedData = transformBeforeSet(data);
+  const processedData = beforeSetFormValueFn(data);
   const formModel = pick(processedData, keys(props.model));
   Object.assign(props.model, formModel);
   emit("setFormValue", formModel);
+};
+
+const resetFormData = () => {
+  const formModel = pick(unref(initModel), keys(props.model));
+  Object.assign(props.model, formModel);
 };
 
 const getFormData = async (id: Key) => {
@@ -203,7 +219,7 @@ const getFormData = async (id: Key) => {
 const onCancel = async () => {
   await nextTick();
   formRef.value?.clearValidate();
-  setFormValue(unref(initModel));
+  resetFormData();
   record.value = null;
   emit("cancel");
 };
@@ -216,15 +232,19 @@ const onSubmit = async () => {
     return;
   }
   const { saveApi, beforeSubmit } = props;
-  const formData = cloneDeep(props.model);
+  let formData = cloneDeep(props.model);
   try {
     const values = await formRef.value.validate();
     emit("finish", values);
     if (!saveApi && !isFunction(saveApi)) return;
     //提交表单之前的处理函数
     if (beforeSubmit && isFunction(beforeSubmit)) {
-      const res = await beforeSubmit(formData);
-      if (isBoolean(res) && !res) return;
+      const result = await beforeSubmit(formData);
+      if (isBoolean(result) && !result) {
+        return;
+      }else if(isObject(result)){
+        formData = result;
+      }
     }
     try {
       changeOkLoading(true);
@@ -239,6 +259,7 @@ const onSubmit = async () => {
       changeOkLoading(false);
     }
   } catch (error) {
+    console.error(error)
     emit("finishFailed", error);
   }
 };
@@ -251,7 +272,10 @@ defineExpose({
   getFormRef,
   closeModal,
   onSubmit,
-  changeOkLoading
+  changeOkLoading,
+  changeLoading,
+  setFormValue,
+  resetFormData
 });
 </script>
 

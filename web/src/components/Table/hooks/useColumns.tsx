@@ -123,7 +123,7 @@ export function useColumns(
             );
           } else if (type == "img") {
             const { width = 60, height = 60 } = column?.props as columnProps;
-            return <Image src={value} width={width} height={height} {...column.props} />;
+            return value ? <Image src={value} width={width} height={height} {...column.props} /> : null;
           } else if (type == "date") {
             const { format = "YYYY-MM-DD" } = column.props as columnProps;
             return <span {...column.props}>{value && dayjs(value).format(format)}</span>;

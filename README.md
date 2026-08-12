@@ -1,3 +1,5 @@
+
+
 <br />
 <div align="center">
     <h1 style="font-size: 36px;color: #2c3e50;font-weight: 600;margin: 0 0 6px 0;">SpeedAdmin</h1>
@@ -74,6 +76,21 @@
 **Ant Design Vue：** 企业级 UI 组件库，开箱即用，风格统一。
 
 **高效开发体验：** 丰富的前端组件 + 一键生成 CRUD 代码，提升开发效率。
+
+## 快速开始
+
+### 前端 (web 目录)
+```bash
+npm install          # 安装依赖
+npm run dev          # 开发服务器
+npm run build        # 生产构建
+```
+
+### 后端 (根目录)
+```bash
+composer install         # 安装 PHP 依赖
+php think <command>      # 运行 ThinkPHP 命令
+```
 
 ## 页面预览
 

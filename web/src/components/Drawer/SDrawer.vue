@@ -165,4 +165,12 @@ function handleOk() {
     }
   }
 }
+[data-theme="dark"]{
+  .s-drawer .anticon-close{
+    color: #fff;
+    &:hover{
+      background: #e6e6e617;
+    }
+  }
+}
 </style>

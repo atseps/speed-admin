@@ -6,7 +6,7 @@ export default () => {
     }
     return (
       <a
-        style={{ color: "#00000094", marginRight: "8px" }}
+        style={{ color: "var(--ant-color-text-secondary)", marginRight: "8px" }}
         onClick={(event: Event) => {
           props.onExpand(props.record, event);
         }}

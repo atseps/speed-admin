@@ -175,8 +175,7 @@ class JwtAuth
     public function addBlacklist(string $token): void
     {
         $plain = $this->parseToken($token);
-        Cache::tag($this->getCachePrefix())
-            ->set(
+        Cache::set(
                 $this->getCacheKey($plain),
                 time(), //存储加入黑名单的时间
                 $this->getBlacklistTtl()

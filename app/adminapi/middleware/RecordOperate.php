@@ -74,7 +74,7 @@ class RecordOperate
      */
     protected function getPermission($rules)
     {
-        return Menu::where('rules', $rules)->cache(60)->find();
+        return Menu::where('rules', $rules)->find();
     }
 
     /**

@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import { isFunction } from "@/utils/is";
 import { get, omit, keys, isEqual } from "lodash-es";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { formItemProps } from "ant-design-vue/es/form";
 import { apiTreeSelectProps } from "./props";
 import { useVModel } from "@vueuse/core";
 import type { FormItemProps, TreeSelectProps } from "ant-design-vue";

@@ -139,8 +139,6 @@ const fetchData = async () => {
       }
       videoChartsData.value = el.y;
     });
-  } catch (err) {
-    // you can report use errorHandler or other
   } finally {
     setLoading(false);
   }

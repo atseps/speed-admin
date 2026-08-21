@@ -2,26 +2,30 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
-import path from "path";
+import { createSvgIconsPlugin } from "vite-plugin-svg-icons-ng";
 
-//按需导入
+// 按需导入
 import Components from "unplugin-vue-components/vite";
 import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import AutoImport from "unplugin-auto-import/vite";
+
+/**
+ * Ant Design Vue 依赖预构建入口集合
+ */
 function getAntdDeps() {
-  const prefixLib = "ant-design-vue/lib/";
-  const prefixEs = "ant-design-vue/es/";
-  const libModules = [
-    "form",
-    "select",
-    "checkbox",
-    "input-number",
-    "Radio/Group",
-    "input/inputProps",
+  return [
+    "ant-design-vue/es/form",
+    "ant-design-vue/es/select",
+    "ant-design-vue/es/checkbox",
+    "ant-design-vue/es/input-number",
+    "ant-design-vue/es/radio/Group",
+    "ant-design-vue/es/input/inputProps",
+    "ant-design-vue/es/button/buttonTypes",
+    "ant-design-vue/es/vc-resize-observer",
+    "ant-design-vue/es/_util/vnode",
+    "ant-design-vue/es/date-picker/dayjs",
+    "ant-design-vue/es/_util/props-util"
   ];
-  const esModules = ["vc-resize-observer", "_util/vnode", "_util/props-util"];
-  return [...libModules.map(m => prefixLib + m), ...esModules.map(m => prefixEs + m)];
 }
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -60,7 +64,7 @@ export default defineConfig(({ mode }) => {
       }),
       createSvgIconsPlugin({
         // 指定需要缓存的图标文件夹
-        iconDirs: [path.resolve(process.cwd(), "src/assets/svgs")],
+        iconDirs: [resolve(process.cwd(), "src/assets/svgs")],
         // 指定symbolId格式
         symbolId: "icon-[dir]-[name]"
       })
@@ -72,7 +76,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       //配置别名
       alias: {
-        "@": resolve(__dirname, "src") // 设置 `@` 指向 `src` 目录
+        "@": resolve(import.meta.dirname, "src") // 设置 `@` 指向 `src` 目录
       }
     },
     // 生产环境打包配置
@@ -88,11 +92,10 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: [
-        "vue",
-        "@vueuse/core",
         "vue-router",
         "lodash-es",
         "vue-echarts",
+        "@wangeditor/editor-for-vue",
         ...getAntdDeps()
       ]
     },

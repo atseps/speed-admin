@@ -1,4 +1,4 @@
-import type { ButtonProps } from "ant-design-vue/lib/button/buttonTypes";
+import type { ButtonProps } from "ant-design-vue/es/button/buttonTypes";
 import type { CSSProperties, VNodeChild, ComputedRef } from "vue";
 import { ButtonType } from "ant-design-vue/es/button";
 import type { DrawerProps as ADrawerProps } from "ant-design-vue";

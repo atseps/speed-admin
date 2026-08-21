@@ -27,7 +27,7 @@
 import { useUserStore } from "@/store/modules/user";
 import { storeToRefs } from "pinia";
 import { updateInfo } from "@/api/system/user";
-import { keys, pick } from "lodash";
+import { keys, pick } from "lodash-es";
 
 const { message } = useMessage();
 const store = useUserStore();

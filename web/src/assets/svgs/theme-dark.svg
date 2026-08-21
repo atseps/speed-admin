@@ -31,7 +31,7 @@
                         <use fill="#F0F2F5" fill-rule="evenodd" xlink:href="#path-2"></use>
                     </g>
                     <rect id="Rectangle-11" fill="#FFFFFF" mask="url(#mask-3)" x="0" y="0" width="48" height="10"></rect>
-                    <rect id="Rectangle-18" fill="#303648" mask="url(#mask-3)" x="0" y="0" width="16" height="40"></rect>
+                    <rect id="Rectangle-18-dup3" fill="#303648" mask="url(#mask-3)" x="0" y="0" width="16" height="40"></rect>
                 </g>
             </g>
         </g>

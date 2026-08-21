@@ -18,7 +18,7 @@
 </template>
 <script lang="ts" setup>
 import { SModal, useModalInner } from "@/components/Modal";
-import { formProps } from "ant-design-vue/lib/form";
+import { formProps } from "ant-design-vue/es/form";
 import { isFunction, isBoolean, isString, isNumber, isObject } from "@/utils/is";
 import { keys, pick, omit, cloneDeep, difference } from "lodash-es";
 type Key = string | number;

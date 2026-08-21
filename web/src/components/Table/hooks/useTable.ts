@@ -1,5 +1,5 @@
 import { getDynamicProps, isProdMode } from "@/utils";
-import type { WatchStopHandle } from "vue";
+import { unref, type WatchStopHandle } from "vue";
 import { isArray } from "@/utils/is";
 import type { BasicTableProps, TableActionType } from "../types";
 type Props = Partial<DynamicProps<BasicTableProps>>;
@@ -54,7 +54,7 @@ export function useTable(
 
   //删除
   const handleDelete = async (id?: Array<string | number> | number | string, failRefresh = true) => {
-    const { deleteApi } = tableProps;
+    const deleteApi = unref(tableProps.deleteApi);
     if (!deleteApi) return;
     const rowkey = id && (isArray(id) || !isNaN(Number(id))) ? id : getTableInstance().getSelectRowKeys();
     //批量删除

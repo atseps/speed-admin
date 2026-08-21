@@ -1,4 +1,4 @@
-import type { FormLayout } from "ant-design-vue/lib/form/Form";
+import type { FormLayout } from "ant-design-vue/es/form/Form";
 
 export type BreakPointType = {
   [key: string]: number;

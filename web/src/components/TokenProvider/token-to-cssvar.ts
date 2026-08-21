@@ -1,8 +1,11 @@
 import type { GlobalToken } from "ant-design-vue/es/theme";
-import { kebabCase } from "lodash";
-import { updateCSS } from "ant-design-vue/lib/vc-util/Dom/dynamicCSS";
-import canUseDom from "ant-design-vue/lib/_util/canUseDom";
+import { kebabCase } from "lodash-es";
+import { updateCSS } from "ant-design-vue/es/vc-util/Dom/dynamicCSS";
 import { isNumber } from "@/utils/is";
+
+function canUseDom() {
+  return !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+}
 
 const formatKey = (key: string, prefixCls: string) => {
   return `${prefixCls}${kebabCase(key)}`;

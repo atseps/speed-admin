@@ -15,8 +15,8 @@
 import { omit, keys } from "lodash-es";
 import type { InputNumberProps } from "ant-design-vue";
 import type { FormItemProps } from "ant-design-vue";
-import { inputNumberProps } from "ant-design-vue/lib/input-number";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { inputNumberProps } from "ant-design-vue/es/input-number";
+import { formItemProps } from "ant-design-vue/es/form";
 import { useVModel } from "@vueuse/core";
 import { useWidgetSlots } from "@/hooks/useWidgetSlots";
 

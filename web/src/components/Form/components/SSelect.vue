@@ -22,8 +22,8 @@
 
 <script setup lang="ts">
 import { omit, keys } from "lodash-es";
-import { selectProps } from "ant-design-vue/lib/select";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { selectProps } from "ant-design-vue/es/select";
+import { formItemProps } from "ant-design-vue/es/form";
 import { useVModel } from "@vueuse/core";
 import { apiProps } from "./props";
 import useOptions from "./useOptions";

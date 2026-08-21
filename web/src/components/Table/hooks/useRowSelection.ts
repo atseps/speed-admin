@@ -2,7 +2,7 @@ import type { ComputedRef } from "vue";
 import { omit } from "lodash-es";
 import { isBoolean } from "@/utils/is";
 import type { BasicTableProps } from "../types";
-import type { Key } from "ant-design-vue/lib/table/interface";
+import type { Key } from "ant-design-vue/es/table/interface";
 export function useRowSelection(props: ComputedRef<BasicTableProps>) {
   const selectedRowKeys = ref<Key[]>([]); //选中的key
   const selectedRow = ref<Recordable[]>([]); //选中的行

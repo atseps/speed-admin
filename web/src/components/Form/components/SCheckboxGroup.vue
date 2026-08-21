@@ -15,8 +15,8 @@
 import { omit, keys } from "lodash-es";
 import type { CheckboxGroupProps } from "ant-design-vue";
 import type { FormItemProps } from "ant-design-vue";
-import { checkboxGroupProps } from "ant-design-vue/lib/checkbox";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { checkboxGroupProps } from "ant-design-vue/es/checkbox";
+import { formItemProps } from "ant-design-vue/es/form";
 import { useVModel } from "@vueuse/core";
 import { apiProps } from "./props";
 import useOptions from "./useOptions";

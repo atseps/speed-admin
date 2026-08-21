@@ -1,7 +1,7 @@
 import { unref } from "vue";
 import type { FormState } from "./index";
 import type { FormMethods } from "./useFormMethods";
-import type { NamePath } from "ant-design-vue/lib/form/interface";
+import type { NamePath } from "ant-design-vue/es/form/interface";
 import type { BaseFormPropsType, BaseFormEmit } from "../types";
 import type { EmitsOptions, SetupContext } from "vue";
 export type EmitFn<E = EmitsOptions> = SetupContext<E>["emit"];

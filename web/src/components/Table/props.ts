@@ -1,5 +1,5 @@
 import { propTypes } from "@/utils/propTypes";
-import type { TableRowSelection } from "ant-design-vue/lib/table/interface";
+import type { TableRowSelection } from "ant-design-vue/es/table/interface";
 import type { TableColumnType, PaginationProps, TableProps } from "ant-design-vue";
 import type { TableColumnProps } from "./types";
 

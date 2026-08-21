@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { omit } from "lodash-es";
 import type { FormItemProps } from "ant-design-vue";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { formItemProps } from "ant-design-vue/es/form";
 import { useVModel } from "@vueuse/core";
 import type { DatePickerProps } from "ant-design-vue";
 import { useWidgetSlots } from "@/hooks/useWidgetSlots";

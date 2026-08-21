@@ -1,8 +1,8 @@
 import { PaginationProps, TableColumnType, TableProps } from "ant-design-vue";
 import type { SearchFormType } from "@/components/SearchForm/typing";
 import type { ComputedRef,CSSProperties } from "vue";
-import type { Key } from "ant-design-vue/lib/table/interface";
-import type { ColumnProps as AntColumnProps } from "ant-design-vue/lib/table";
+import type { Key } from "ant-design-vue/es/table/interface";
+import type { ColumnProps as AntColumnProps } from "ant-design-vue/es/table";
 
 export interface SearchState {
   sortInfo: Recordable;

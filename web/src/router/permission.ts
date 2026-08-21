@@ -14,7 +14,7 @@ export function setupRouterGuard(router: Router) {
 
   const whiteList = ["/login"];
 
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to) => {
     const userStore = useUserStore();
     const appStore = useAppStore();
     const permissionStore = usePermissionStore();
@@ -30,53 +30,52 @@ export function setupRouterGuard(router: Router) {
     if (hasToken) {
       if (to.path === "/login") {
         // 如果已登录，则重定向到首页
-        next({ path: "/" });
         NProgress.done();
+        return { path: "/" };
       } else {
         // 是否已获取用户角色
         const hasRoles = userStore.roles && userStore.roles.length > 0;
         if (hasRoles) {
-          next();
-          return;
+          return true;
         } else {
           try {
             // 重新获取用户信息
             await userStore.getUserInfo();
             // 获取路由
             const accessRoutes: RouteRecord[] = await generatorDynamicRouter();
-            //设置菜单
+            // 设置菜单
             permissionStore.setMenus(accessRoutes);
             // 添加路由
-            accessRoutes.forEach((item:any) => {
-              //外链不加入路由
+            accessRoutes.forEach((item: any) => {
+              // 外链不加入路由
               if (httpReg(item.path)) {
                 return;
               }
               router.addRoute(item);
             });
             // 路由跳转
-            next({ path: to.path, replace: true, query: to.query });
-          } catch (error:any) {
+            return { path: to.path, replace: true, query: to.query };
+          } catch (error: any) {
             // 获取用户信息失败
             if (error?.status === 401) {
-              return next({ path: "/login" });
+              return { path: "/login" };
             }
             notification.error({
               message: "错误",
               description: "请求用户信息失败，请重试"
             });
             await userStore.logout();
-            next({ path: "/login", query: { redirect: to.fullPath } });
+            return { path: "/login", query: { redirect: to.fullPath } };
           }
         }
       }
     } else {
       // 不存在令牌
       if (whiteList.includes(to.path)) {
-        next();
+        return true;
       } else {
-        next({ path: "/login", query: { redirect: to.fullPath } });
         NProgress.done();
+        return { path: "/login", query: { redirect: to.fullPath } };
       }
     }
   });

@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 import notification from "ant-design-vue/es/notification";
 import { getAccessToken, getRefreshToken } from "@/utils/auth";
 import { useUserStore } from "@/store/modules/user";
@@ -38,17 +39,25 @@ const errorHandler = (error: Recordable) => {
   return Promise.reject(error);
 };
 
-// request 拦截器
-http.interceptors.request.use((config: Recordable) => {
+/**
+ * 为请求附加当前访问令牌。
+ *
+ * @param config Axios 内部请求配置
+ * @returns 附加访问令牌后的请求配置
+ */
+function attachAccessToken(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
   const token = getAccessToken();
   if (token) {
-    config.headers = {
+    config.headers = AxiosHeaders.from({
       Authorization: token,
-      ...config.headers
-    };
+      ...config.headers.toJSON()
+    });
   }
   return config;
-}, errorHandler);
+}
+
+// request 拦截器
+http.interceptors.request.use(attachAccessToken, errorHandler);
 
 // response 拦截器
 http.interceptors.response.use(response => {
@@ -73,25 +82,25 @@ let requests: Array<Fn> = [];
 const refreshToken = (response: Recordable) => {
   const config = response.config;
   const store = useUserStore();
-  const refreshToken = getRefreshToken();
-  if (!refreshing && refreshToken) {
+  const storedRefreshToken = getRefreshToken();
+  if (!refreshing && storedRefreshToken) {
     refreshing = true;
     return http({
       url: "refreshToken",
       method: "get",
       headers: {
-        Authorization: refreshToken
+        Authorization: storedRefreshToken
       }
     })
       .then(({ data }) => {
         store.setToken(data);
-        config.headers["Authorization"] = getAccessToken();
+        config.headers.set("Authorization", getAccessToken());
         // 请求出队列
         requests.forEach((cb: Fn) => cb());
         requests = [];
         return http(config);
       })
-      .catch((err) => {
+      .catch(err => {
         requests = [];
         store.logout(false);
         return Promise.reject(err);
@@ -107,7 +116,7 @@ const refreshToken = (response: Recordable) => {
     return new Promise(resolve => {
       // 将resolve放进队列，用一个函数形式来保存，等token刷新后直接执行
       requests.push(() => {
-        config.headers["Authorization"] = getAccessToken();
+        config.headers.set("Authorization", getAccessToken());
         resolve(http(config));
       });
     });

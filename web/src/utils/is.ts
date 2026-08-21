@@ -37,7 +37,7 @@ export function isURL(url: string, protocols: string[] = ['http:', 'https:']) {
   try {
     const urlObj = new URL(url);
     return protocols.includes(urlObj.protocol);
-  } catch (err) {
+  } catch (_err) {
     return false;
   }
 }

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import inputProps from "ant-design-vue/lib/input/inputProps";
+import inputProps from "ant-design-vue/es/input/inputProps";
 import { getUserById } from "@/api/system/user";
 import { useModal } from "@/components/Modal";
 import SSelectUserModal from "./SSelectUserModal.vue";

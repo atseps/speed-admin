@@ -13,10 +13,10 @@
 
 <script setup lang="ts">
 import { omit, keys } from "lodash-es";
-import inputProps from "ant-design-vue/lib/input/inputProps";
+import inputProps from "ant-design-vue/es/input/inputProps";
 import type { InputProps } from "ant-design-vue";
 import type { FormItemProps } from "ant-design-vue";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { formItemProps } from "ant-design-vue/es/form";
 import { useVModel } from "@vueuse/core";
 import { useWidgetSlots } from "@/hooks/useWidgetSlots";
 

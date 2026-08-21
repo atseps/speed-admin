@@ -1,5 +1,5 @@
 import type { PropType, ExtractPropTypes, VNode } from "vue";
-import { formProps, type FormProps } from "ant-design-vue/lib/form";
+import { formProps, type FormProps } from "ant-design-vue/es/form";
 import type { Options } from "scroll-into-view-if-needed";
 import type BaseFrom from "./BaseForm";
 import type { SubmitterProps } from "../../components/Submitter/types";

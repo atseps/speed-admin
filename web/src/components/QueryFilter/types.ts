@@ -2,7 +2,7 @@ import type { ExtractPropTypes, PropType } from "vue";
 import type { CSSProperties } from "vue";
 import { baseFormProps } from "./components/BaseForm/types";
 import type { default as QueryFilter } from "./QuertFilter";
-import type { RowProps } from "ant-design-vue/lib/grid/Row";
+import type { RowProps } from "ant-design-vue/es/grid/Row";
 import type { ButtonProps } from "ant-design-vue";
 import type { SpanConfig } from "./components/form-action/utils/span-config";
 

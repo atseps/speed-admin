@@ -51,7 +51,7 @@ const handleCopy = async (text: string) => {
   try {
     await toClipboard(text);
     message.success("复制成功");
-  } catch (e) {
+  } catch {
     message.error("复制失败");
   }
 };

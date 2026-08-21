@@ -15,8 +15,8 @@
 import { omit, keys } from "lodash-es";
 import type { RadioGroupProps } from "ant-design-vue";
 import type { FormItemProps } from "ant-design-vue";
-import { radioGroupProps } from "ant-design-vue/lib/Radio/Group";
-import { formItemProps } from "ant-design-vue/lib/form";
+import { radioGroupProps } from "ant-design-vue/es/radio/Group";
+import { formItemProps } from "ant-design-vue/es/form";
 import { useVModel } from "@vueuse/core";
 import { apiProps } from "./props";
 import useOptions from "./useOptions";

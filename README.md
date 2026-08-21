@@ -33,6 +33,64 @@
 体验地址：[https://crm.atsep.top/web](https://crm.atsep.top/web) <br>
 账号：demo 密码：123456<br>
 
+
+## 🚀 快速开始
+
+### 环境要求
+
+- **PHP**: >= 8.2
+- **MySQL**: >= 5.7
+- **Node.js**: ^22.18.0 || >=24.11.0
+
+
+### 后端安装
+1. 拉取代码 
+```sh
+git clone https://gitee.com/fantasyc/speed-admin.git
+```
+
+2. 安装依赖 
+
+```sh
+composer install
+```
+3. 初始化数据
+
+```sh
+# 执行之前请先配置好你的数据库连接信息
+php think install:database
+```
+4. 启动 
+```sh
+php think run
+```
+
+### 前端安装
+
+1. **进入前端目录**
+```bash
+cd web
+```
+
+2. **安装依赖**
+```bash
+npm install
+```
+#### 配置接口地址
+在启动前需要先配置接口地址，在前端项目根目录下的 `.env.development` 文件中，设置 `VITE_API_BASE_URL` 变量，指定开发环境的 API 请求地址
+
+
+```js
+#请求api
+VITE_API_BASE_URL='http://127.0.0.1:8000/adminapi' #你的实际接口地址
+
+```
+3. 启动 
+```sh
+npm run dev
+```
+
+
 ## 特性
 
 ### 🔥 现代化全栈开发技术栈

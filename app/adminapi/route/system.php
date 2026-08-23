@@ -93,6 +93,11 @@ Route::group(function () {
         Route::post('attachment', 'system.file/uploadAttachment');
     });
 
+    //菜单
+    Route::group('menu', function () {
+        //拖动排序
+       Route::post('updateSort', 'system.menu/updateSort');
+    });
 
     //资源路由
     Route::group(function () {

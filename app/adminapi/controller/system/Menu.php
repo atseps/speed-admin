@@ -83,4 +83,16 @@ class Menu extends BaseController
         $result = $this->service->delete($id);
         $result ? $this->success('删除成功') : $this->error('删除失败');
     }
+
+    /**
+     * 同层拖动排序更新
+     *
+     * @return \think\Response
+     */
+    public function updateSort()
+    {
+        $data = $this->request->param();
+        $result = $this->service->updateSort($data);
+        $result ? $this->success('排序更新成功') : $this->error('排序更新失败');
+    }
 }

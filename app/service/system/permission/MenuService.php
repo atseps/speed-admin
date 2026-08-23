@@ -86,6 +86,26 @@ class MenuService extends BaseService
         }
     }
 
+    /**
+     * 批量更新排序
+     *
+     * @param  array  $data  排序数据
+     * @return bool
+     * @throws FailedException
+     */
+    public function updateSort(array $data)
+    {
+        if (empty($data)) {
+            throw new FailedException('排序数据不能为空');
+        }
+        foreach ($data as $value) {
+            if (!is_array($value) || !array_key_exists('id', $value) || !array_key_exists('sort', $value)) {
+                throw new FailedException('排序数据格式错误,必须包含 id 和 sort');
+            }
+        }
+        return $this->model->saveAll($data);
+    }
+
 
     /**
      * 获取路由

@@ -57,6 +57,7 @@
       </div>
       <section class="dict-container-right">
         <s-table
+          :key="state.currentValue.id"
           ref="tableRef"
           :loading="state.loading"
           :dataSource="state.tableData"
@@ -111,7 +112,7 @@
                   class="action-icon"
               /></a-tooltip>
               <a-divider type="vertical" />
-              <a-tooltip title="排序"
+              <a-tooltip title="按住拖动排序" :open="isDragging ? false : undefined"
                 ><s-icon
                   color="#1677ff"
                   type="menu-outlined"
@@ -136,17 +137,18 @@ import {
   changeStatus
 } from "@/api/system/dict";
 import dictForm from "./form.vue";
-import { useSortable } from "@/hooks/useSortable";
-import { SortableEvent } from "sortablejs";
+import Sortable, { type SortableEvent } from "sortablejs";
 import type { TableColumnProps } from "@/components/Table/types";
 type DictDataType = {
-  id: string;
+  id: string | number;
   name: string;
   value: string | number;
   is_delete: boolean;
   extend: string;
   note: string;
   type: string;
+  sort: number;
+  status: number;
 };
 
 const { message, createConfirm, responseNotice } = useMessage();
@@ -155,24 +157,28 @@ const columns: TableColumnProps[] = [
   {
     title: "id",
     dataIndex: "id",
-    width: 80
+    width: 60
   },
   {
     title: "字典名称",
-    dataIndex: "name"
+    dataIndex: "name",
+    width: 120
   },
   {
     title: "字典类型",
-    dataIndex: "type"
+    dataIndex: "type",
+
   },
   {
     title: "字典值",
     dataIndex: "value",
-    customRender: ({ text }) => <a>{text}</a>
+    customRender: ({ text }) => <a>{text}</a>,
+    width: 80
   },
   {
     title: "状态",
-    dataIndex: "status"
+    dataIndex: "status",
+    width: 100
   },
   {
     title: "备注",
@@ -181,7 +187,7 @@ const columns: TableColumnProps[] = [
   {
     title: "操作",
     dataIndex: "action",
-    width:140
+    width: 140
   }
 ];
 
@@ -189,77 +195,150 @@ const state = reactive({
   currentValue: {} as Recordable,
   spinning: false,
   loading: false,
-  data: [],
-  tableData: [],
-  dataSource: [],
+  data: [] as DictDataType[],
+  tableData: [] as DictDataType[],
+  dataSource: [] as DictDataType[],
   dictTypeKey: "dict_type"
 });
 
 const [registerModal, { openModal }] = useModal();
 
 watch(
-  () => state.currentValue,
-  () => {
-    loadData();
+  () => state.currentValue?.value,
+  value => {
+    if (value !== undefined) loadData();
   }
 );
 
 const tableRef = ref();
+const isDragging = ref(false);
+let sortableInstance: ReturnType<typeof Sortable.create> | null = null;
+let loadRequestId = 0;
 
 onMounted(() => {
   state.loading = true;
   getDictType(true);
 });
 
+/**
+ * 加载字典分类列表
+ *
+ * @param isInit 是否初始化选中第一个分类
+ * @returns 分类请求
+ */
 const getDictType = (isInit?: boolean) => {
   state.spinning = true;
   return getDictList({ type: state.dictTypeKey })
     .then(({ data }) => {
       state.dataSource = state.data = data;
       isInit && (state.currentValue = data[0]);
-      sortDrag();
     })
     .finally(() => {
       state.spinning = false;
     });
 };
 
-const updateSort = () => {
-  const data = state.tableData.map((item: DictDataType, index) => {
-    return { id: item.id, sort: index + 1 };
-  });
-  updateSortApi(data);
+/**
+ * 销毁旧拖拽实例并清理拖拽状态
+ *
+ * @returns void
+ */
+const destroyDrag = (): void => {
+  sortableInstance?.destroy();
+  sortableInstance = null;
+  isDragging.value = false;
 };
 
-let isFirstLoad = false;
+/**
+ * 处理字典项拖动排序
+ *
+ * @param evt Sortable 结束事件
+ * @returns 排序与保存完成后的 Promise
+ */
+const handleDragEnd = async (evt: SortableEvent): Promise<void> => {
+  isDragging.value = false;
+  const { oldDraggableIndex, newDraggableIndex } = evt;
+  if (
+    oldDraggableIndex === undefined ||
+    newDraggableIndex === undefined ||
+    oldDraggableIndex === newDraggableIndex
+  ) {
+    return;
+  }
 
-const sortDrag = () => {
-  if (isFirstLoad) return;
-  const tableElRef = unref(tableRef).tableElRef;
-  const el = tableElRef?.$el.querySelector(".ant-table-tbody");
-  useSortable(el, {
+  const orderedRows = [...state.tableData];
+  const [sourceRow] = orderedRows.splice(oldDraggableIndex, 1);
+  if (!sourceRow) return;
+  orderedRows.splice(newDraggableIndex, 0, sourceRow);
+
+  orderedRows.forEach((item, index) => {
+    item.sort = index + 1;
+  });
+  state.tableData = orderedRows;
+
+  const sortedType = state.currentValue.value;
+  const updates = orderedRows.map(item => ({ id: item.id, sort: item.sort }));
+  await nextTick();
+  try {
+    await updateSortApi(updates);
+    message.success("排序更新成功");
+  } catch {
+    message.error("排序更新失败");
+    if (state.currentValue.value === sortedType) loadData();
+  }
+};
+
+/**
+ * 为当前字典表格初始化拖拽排序
+ *
+ * @returns void
+ */
+const initDrag = (): void => {
+  const tableElRef = unref(tableRef)?.tableElRef;
+  const tbody = tableElRef?.$el?.querySelector(".ant-table-tbody") as HTMLElement | null;
+  if (!tbody) return;
+
+  sortableInstance = Sortable.create(tbody, {
     handle: ".move-icon",
-    onEnd({ newIndex, oldIndex }: SortableEvent) {
-      if (oldIndex === undefined || newIndex === undefined || oldIndex === newIndex) return;
-      const currRow = state.tableData.splice(oldIndex - 1, 1)[0];
-      state.tableData.splice(newIndex - 1, 0, currRow);
-      updateSort();
-    }
+    draggable: ".ant-table-row",
+    animation: 500,
+    forceFallback: true,
+    fallbackOnBody: true,
+    fallbackTolerance: 3,
+    fallbackClass: "sortable-drag-fallback",
+    chosenClass: "dict-drag-chosen",
+    onStart: () => {
+      isDragging.value = true;
+    },
+    onEnd: handleDragEnd
   });
 };
 
-const loadData = () => {
+/**
+ * 加载当前分类的字典项并重新绑定拖拽
+ *
+ * @returns 数据加载完成后的 Promise
+ */
+const loadData = async (): Promise<void> => {
+  const type = state.currentValue.value;
+  const requestId = ++loadRequestId;
+  destroyDrag();
   state.loading = true;
-  getDictList({ type: state.currentValue.value })
-    .then(({ data }) => {
-      state.loading = false;
-      state.tableData = data;
-      isFirstLoad = true;
-    })
-    .finally(() => {
-      state.loading = false;
-    });
+  state.tableData = [];
+
+  try {
+    const { data } = await getDictList({ type });
+    // 只接收最后一次分类请求，避免旧响应串入当前列表
+    if (requestId !== loadRequestId) return;
+    state.tableData = data;
+    await nextTick();
+    if (requestId === loadRequestId) initDrag();
+  } finally {
+    if (requestId === loadRequestId) state.loading = false;
+  }
 };
+
+onBeforeUnmount(destroyDrag);
 
 const onSearch = (e: Event) => {
   const { value } = e.target as HTMLInputElement;
@@ -287,10 +366,10 @@ const refresh = async (model: Recordable) => {
 //手动更新缓存
 const handleDictUpdate = () => {
   message.loading({ content: "缓存更新中...", key: "key" });
-  updateCache().then((res) => {
-    if(res.code == 1){
-      message.success({ content:  res.msg, key: "key", duration: 1.5 });
-    }else{
+  updateCache().then(res => {
+    if (res.code == 1) {
+      message.success({ content: res.msg, key: "key", duration: 1.5 });
+    } else {
       message.error({ content: res.msg, key: "key", duration: 1.5 });
     }
   });
@@ -305,9 +384,9 @@ const onDelete = (data: Recordable) => {
     centered: true,
     onOk: () => {
       return destroy(data.id).then(res => {
-        responseNotice(res)
-         isDictType ? getDictType() : loadData();
-          isActiveKey && (state.currentValue = state.data[0]);
+        responseNotice(res);
+        isDictType ? getDictType() : loadData();
+        isActiveKey && (state.currentValue = state.data[0]);
       });
     }
   });
@@ -323,7 +402,7 @@ const updateStatus = (data: Recordable) => {
     centered: true,
     onOk: () => {
       return changeStatus(data.id).then(res => {
-        responseNotice(res)
+        responseNotice(res);
         isDictType ? getDictType() : loadData();
       });
     }
@@ -435,6 +514,10 @@ const updateStatus = (data: Recordable) => {
     .type {
       font-size: 12px;
       color: #999;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     span {
@@ -477,5 +560,9 @@ const updateStatus = (data: Recordable) => {
   .custom-dict-node span:hover {
     color: #fff;
   }
+}
+
+:deep(.dict-drag-chosen > td) {
+  background: rgb(22 119 255 / 8%) !important;
 }
 </style>

@@ -170,3 +170,17 @@
 .ant-empty-description {
   color: var(--ant-color-text);
 }
+
+.sortable-drag-fallback {
+  display: table;
+  z-index: 9999;
+  opacity: 0.9;
+  background: var(--ant-color-bg-container, #fff);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 16%);
+  > .ant-table-cell {
+    vertical-align: middle;
+  }
+  .ant-table-row-expand-icon {
+    visibility: hidden;
+  }
+}

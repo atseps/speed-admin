@@ -27,3 +27,11 @@ export function save(data: Recordable) {
 export function destroy(id: string) {
   return request.delete(`menu/${id}`);
 }
+
+/**
+ * 同层拖动排序 - 批量更新菜单 sort 字段
+ * @param data
+ */
+export function updateSort(data: Recordable[]) {
+  return request.post("menu/updateSort", data);
+}

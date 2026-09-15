@@ -12,13 +12,39 @@ class Generator extends BaseController
 
     private $service;
 
+    /**
+     * 不参与访问校验的动作
+     */
+    private const SKIP_ACTIONS = ['download'];
+
 
     function __construct(GeneratorService $service)
     {
         parent::__construct();
         $this->service = $service;
+        $this->checkAccess();
+    }
+
+
+    /**
+     * 代码生成器访问校验
+     * 
+     * @return void
+     */
+    protected function checkAccess(): void
+    {
         if (Env::get('app_debug') == false) {
             $this->error('代码生成仅开发模式下可用');
+        }
+        if (!Env::get('ENABLE_CODE_GENERATOR', false)) {
+            $this->error('代码生成器未开启，如需使用请在 .env 中设置 ENABLE_CODE_GENERATOR = true');
+        }
+        if (in_array($this->request->action(), self::SKIP_ACTIONS, true)) {
+            return;
+        }
+        // 只允许超管使用
+        if (!is_super_admin()) {
+            $this->error('代码生成器仅限超级管理员使用');
         }
     }
 

@@ -171,7 +171,7 @@ class VueEditGenerator extends BaseGenerator
      */
     public function getModuleGenerateDir()
     {
-        $dir = dirname(app()->getRootPath()) . '/admin/src/views/' . $this->getTableName() . '/';
+        $dir = $this->rootPath . 'web/src/views/' . $this->getLowerTableName() . '/';
         $this->checkDir($dir);
         return $dir;
     }

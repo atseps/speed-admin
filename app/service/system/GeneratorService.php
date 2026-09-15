@@ -26,14 +26,17 @@ class GeneratorService extends BaseService
      */
     public function getDatabaseTable($params)
     {
-        $sql = 'SHOW TABLE STATUS WHERE 1=1 ';
+        $sql  = 'SHOW TABLE STATUS WHERE 1=1 ';
+        $bind = [];
         if (!empty($params['table_name'])) {
-            $sql .= "AND name LIKE '%" . $params['table_name'] . "%'";
+            $sql   .= "AND name LIKE ? ";
+            $bind[] = '%' . $params['table_name'] . '%';
         }
         if (!empty($params['table_comment'])) {
-            $sql .= "AND comment LIKE '%" . $params['table_comment'] . "%'";
+            $sql   .= "AND comment LIKE ? ";
+            $bind[] = '%' . $params['table_comment'] . '%';
         }
-        $result =  Db::query($sql);
+        $result =  Db::query($sql, $bind);
         $lists = array_map("array_change_key_case", $result);
         $page = request()->param('page/d') ?: 1;
         $pageSize = request()->param('pageSize') ?: 15;

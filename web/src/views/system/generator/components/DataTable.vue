@@ -99,7 +99,12 @@ const [register, { search, refresh }] = useTable({
   queryParams,
   scroll: { y: 280 },
   rowKey: "name",
-  showTableSetting: false
+  showTableSetting: false,
+  afterFetch: (data: Recordable[], response: ResponseBody) => {
+    if (response.code == 0) {
+      message.error(response.msg);
+    }
+  }
 });
 
 const emit = defineEmits(["save-success", "register"]);

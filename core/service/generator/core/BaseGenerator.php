@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 namespace core\service\generator\core;
-
+use core\exception\FailedException;
 use think\helper\Str;
 
 
@@ -95,6 +95,7 @@ abstract class BaseGenerator
      */
     public function checkDir(string $path)
     {
+        $this->assertSafePath($path);
         !is_dir($path) && mkdir($path, 0755, true);
     }
 
@@ -117,7 +118,72 @@ abstract class BaseGenerator
         return $this;
     }
 
+    /**
+     * 校验文件路径是否安全
+     *
+     *
+     * @param string $path
+     * @return void
+     */
+    protected function assertSafePath(string $path): void
+    {
+        $target = realpath($path);
+        $target = $target !== false ? $target : $this->normalizePath($path);
+        $target = rtrim(str_replace('\\', '/', $target), '/') . '/';
 
+        foreach ($this->safeRoots() as $root) {
+            $real = realpath(rtrim($root, '/\\'));
+            $real = $real !== false ? $real : $this->normalizePath($root);
+            $real = rtrim(str_replace('\\', '/', $real), '/') . '/';
+            if (strpos($target, $real) === 0) {
+                return;   // 命中允许的根目录
+            }
+        }
+
+        throw new FailedException('非法的代码生成路径，已阻止写入：' . $target);
+    }
+
+
+    /**
+     * 允许生成文件写入的根目录
+     *
+     * @return array
+     */
+    protected function safeRoots(): array
+    {
+        return [
+            $this->basePath,           // 生成到模块：app/
+            $this->generatorDir,       // 生成到runtime：runtime/generate/
+            $this->rootPath . 'web/',  // 前端代码：web/
+        ];
+    }
+
+
+    /**
+     * 规范化路径
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function normalizePath(string $path): string
+    {
+        $path   = str_replace('\\', '/', $path);
+        $prefix = str_starts_with($path, '/') ? '/' : '';
+
+        $parts = [];
+        foreach (explode('/', $path) as $part) {
+            if ($part === '' || $part === '.') {
+                continue;
+            }
+            if ($part === '..') {
+                array_pop($parts);
+                continue;
+            }
+            $parts[] = $part;
+        }
+
+        return $prefix . implode('/', $parts);
+    }
 
     /**
      * @notes 生成文件到模块或runtime目录
@@ -132,6 +198,7 @@ abstract class BaseGenerator
             // 生成到runtime目录
             $path = $this->getRuntimeGenerateDir() . $this->getGenerateName();
         }
+        $this->assertSafePath($path);        
         // 写入内容
         file_put_contents($path, $this->content);
     }
@@ -139,12 +206,16 @@ abstract class BaseGenerator
 
     /**
      * @notes 设置表信息
-     * @param $tableData
+     * @param array $tableData
      */
-    public function setTableData($tableData)
+    public function setTableData(array $tableData)
     {
         $this->tableData = !empty($tableData) ? $tableData : [];
         $this->tableColumn = $tableData['table_column'] ?? [];
+        $tableName = (string) ($this->tableData['table_name'] ?? '');
+        if ($tableName !== '' && !preg_match('/^[A-Za-z0-9_]+$/', $tableName)) {
+            throw new FailedException('数据表名称只能由字母、数字、下划线组成');
+        }
     }
 
 
@@ -154,6 +225,10 @@ abstract class BaseGenerator
      */
     public function setModuleName(string $moduleName): void
     {
+        // 只允许字母、数字、下划线
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $moduleName)) {
+            throw new FailedException('模块名只能由字母、数字、下划线组成');
+        }
         $this->moduleName = strtolower($moduleName);
     }
 
@@ -166,6 +241,10 @@ abstract class BaseGenerator
      */
     public function setClassDir(string $classDir): void
     {
+        // 只允许字母、数字、下划线及斜杠（禁掉 ; $ ( ) 换行 .. 等一切可注入字符）
+        if ($classDir !== '' && !preg_match('/^[A-Za-z0-9_]+(?:\/[A-Za-z0-9_]+)*$/', $classDir)) {
+            throw new FailedException('类目录只能由字母、数字、下划线及斜杠组成');
+        }
         $this->classDir = $classDir;
     }
 
@@ -279,9 +358,9 @@ abstract class BaseGenerator
 
     /**
      * @notes 替换内容
-     * @param $needReplace
-     * @param $waitReplace
-     * @param $template
+     * @param array|string $needReplace
+     * @param array|string $waitReplace
+     * @param string $template
      * @return array|false|string|string[]
      */
     public function replaceFileData($needReplace, $waitReplace, $template)
@@ -323,11 +402,11 @@ abstract class BaseGenerator
 
     /**
      * @notes 设置空额占位符
-     * @param $content
-     * @param $blankpace
+     * @param string $content
+     * @param string $blankpace
      * @return string
      */
-    public function setBlankSpace($content, $blankpace)
+    public function setBlankSpace(string $content, string $blankpace)
     {
         if(!is_string($content)){
             $content = '';

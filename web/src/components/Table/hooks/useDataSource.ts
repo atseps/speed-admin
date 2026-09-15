@@ -140,8 +140,8 @@ export function useDataSource(
       showLoading && setLoading(true);
 
       //发起请求
-      const { data: res } = await listApi(params);
-
+      const response = await listApi(params);
+      const { data: res } = response;
       const isArray = Array.isArray(res);
 
       let data: Recordable[] = [];
@@ -165,7 +165,7 @@ export function useDataSource(
       }
 
       if (afterFetch && isFunction(afterFetch)) {
-        data = (await afterFetch(data)) || data;
+        data = (await afterFetch(data, response)) || data;
       }
 
       tableData.value = data;

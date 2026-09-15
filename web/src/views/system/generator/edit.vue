@@ -349,8 +349,12 @@ const generatorLoading = ref(false);
 const handleGenerator = async () => {
   generatorLoading.value = true;
   try {
-    await onSubmit(true);
-    await generatorCode(form.value.id);
+    const res = await onSubmit(true);
+    if(res.code == 1) {
+      generatorCode(form.value.id);
+    }else{
+      message.error(res.msg);
+    }
   } catch (err) {
     message.error("生成失败");
   } finally {

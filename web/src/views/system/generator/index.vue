@@ -74,7 +74,12 @@ const [register, { search, handleDelete }] = useTable({
   columns,
   searchForm,
   listApi: getList,
-  deleteApi: destroy
+  deleteApi: destroy,
+  afterFetch: (data: Recordable[], response: ResponseBody) => {
+    if (response.code == 0) {
+      message.error(response.msg);
+    }
+  }
 });
 
 const [registerModal, { openModal }] = useModal();

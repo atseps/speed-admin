@@ -87,7 +87,7 @@ class VueEditGenerator extends BaseGenerator
      */
     public function geApiDir(){
 
-        return  $this->classDir . '/' . $this->getTableName();
+        return $this->getLowerTableName();
     }
 
     /**
@@ -210,6 +210,16 @@ class VueEditGenerator extends BaseGenerator
             'type' => 'vue',
             'content' => $this->content
         ];
+    }
+
+
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'Vue 前端', 'description' => '表单页'];
     }
 
 

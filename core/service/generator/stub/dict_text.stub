@@ -1,0 +1,5 @@
+    //{COLUMN_COMMENT}
+    public function get{UPPER_CAMEL_NAME}TextAttr($value, $data)
+    {
+        return get_dict_map('{DICT_CODE}', $data['{FIELD}'], '-');
+    }

@@ -171,6 +171,20 @@ class Generator extends BaseController
 
 
     /**
+     * 预览生成目录
+     * 接收表单参数实时计算各文件的生成路径
+     *
+     * @return \think\Response
+     */
+    public function previewPath()
+    {
+        $params = $this->request->param();
+        $result = $this->service->previewPath($params);
+        $result !== false ? $this->success($result) : $this->error($this->service->getError());
+    }
+
+
+    /**
      * 下载文件
      * 
      */

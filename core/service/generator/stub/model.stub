@@ -8,7 +8,7 @@ class {UPPER_CAMEL_NAME} extends BaseModel
 {
 {SOFTDELETE_CONTENT}
     {SEARCH_ARRT}
-
+{DICT_TEXT}
     protected $name = '{TABLE_NAME}';
 
     //开启自动写入时间戳

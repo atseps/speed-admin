@@ -65,6 +65,15 @@ export function preview(id: string) {
 }
 
 /**
+ * 预览生成目录
+ * 传入表单当前参数，实时返回各文件的生成路径
+ * @param params 表单参数
+ */
+export function previewPath(params: Recordable) {
+  return request.get("generator/previewPath", { params });
+}
+
+/**
  * 删除字段
  * @param id
  */

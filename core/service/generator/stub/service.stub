@@ -21,7 +21,7 @@ class {UPPER_CAMEL_NAME}Service extends {EXTENDS_CONTROLLER}
      */
     public function getList()
     {
-        return $this->model->search()->paginate();
+        return $this->model->search(){APPEND_CONTENT}->paginate();
     }
 
 

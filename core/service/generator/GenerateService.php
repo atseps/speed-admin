@@ -92,6 +92,33 @@ class GenerateService
         return $data;
     }
 
+
+    /**
+     * @notes 预览生成目录：返回每个待生成文件的完整路径
+     * @param array $tableData
+     * @return array
+     */
+    public function previewPath(array $tableData)
+    {
+        if (empty($tableData['generate_type'])) {
+            return [];
+        }
+        $data = [];
+        foreach ($this->getGeneratorClass() as $item) {
+            $generator = app()->make($item);
+            // 仅预览模式：只计算路径，不在工程里创建任何目录
+            $generator->setPreviewOnly()->initGenerateData($tableData);
+            $desc = $generator->getFileDescription();
+            $data[] = [
+                'name' => $generator->getGenerateName(),        // 文件名
+                'path' => $generator->getGenerateFilePath(),    // 完整生成路径（相对项目根目录）
+                'group' => $desc['group'] ?? '其他',             // 归属分组
+                'description' => $desc['description'] ?? ''      // 文件用途说明
+            ];
+        }
+        return $data;
+    }
+
     
     /**
      * @notes 压缩文件

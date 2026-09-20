@@ -54,13 +54,18 @@ class VueIndexGenerator extends BaseGenerator
             if (!$column['is_list'] ) {
                 continue;
             }
+            // 带字典的字段列表按 {字段}_text 取值，直接展示后端转化好的字典文本
+            $field = $column['name'];
+            if (!empty($column['dict_type'])) {
+                $field .= '_text';
+            }
             $needReplace = [
                 '{TITLE}', 
                 '{FIELD}',     
             ];
             $waitReplace = [
                 $column['comment'],
-                $column['name'],        
+                $field,        
             ];
             $templatePath = $this->getTemplatePath('other_item/tableColumn');
             if (!file_exists($templatePath)) {
@@ -114,7 +119,7 @@ class VueIndexGenerator extends BaseGenerator
      */
     public function geApiDir(){
 
-        return  $this->classDir . '/' . $this->getTableName();
+        return $this->getLowerTableName();
     }
 
     /**
@@ -162,6 +167,16 @@ class VueIndexGenerator extends BaseGenerator
             'type' => 'vue',
             'content' => $this->content
         ];
+    }
+
+
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'Vue 前端', 'description' => '列表页'];
     }
 
 

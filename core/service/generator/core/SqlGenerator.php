@@ -60,7 +60,7 @@ class SqlGenerator extends BaseGenerator
      * @return mixed
      */
     public function getComponentName(){
-        return $this->tableData['class_dir'] . '/' .  $this->getLowerTableName() . '/index';
+        return $this->getLowerTableName() . '/index';
     }
 
 
@@ -173,6 +173,16 @@ class SqlGenerator extends BaseGenerator
             'type' => 'sql',
             'content' => $this->content
         ];
+    }
+
+
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => '数据库', 'description' => '菜单 SQL'];
     }
 
 

@@ -146,4 +146,14 @@ class ValidateGenerator extends BaseGenerator
     }
 
 
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'PHP 后端', 'description' => '验证器'];
+    }
+
+
 }

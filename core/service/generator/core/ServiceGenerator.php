@@ -19,6 +19,7 @@ class ServiceGenerator extends BaseGenerator
             '{USE}',         //引入类
             '{UPPER_CAMEL_NAME}', //类名称
             '{EXTENDS_CONTROLLER}', //父类名
+            '{APPEND_CONTENT}', //列表追加的获取器字段
         ];
 
         // 等待替换的内容
@@ -27,6 +28,7 @@ class ServiceGenerator extends BaseGenerator
             $this->getUseContent(),
             $this->getUpperCamelName(),
             $this->getExtendsServiceContent(),
+            $this->getAppendContent(),
         ];
 
         $templatePath = $this->getTemplatePath('service');
@@ -86,6 +88,36 @@ class ServiceGenerator extends BaseGenerator
 
 
     /**
+     * @notes 获取列表需要追加的获取器字段内容
+     * 只要字段配置了字典类型就追加，追加后查询结果会多出 {字段}_text 文本字段，供列表页直接展示字典文本
+     * @return string
+     */
+    public function getAppendContent()
+    {
+        $appendFields = [];
+        foreach ($this->tableColumn as $column) {
+            if (empty($column['dict_type'])) {
+                continue;
+            }
+            $appendFields[] = $column['name'] . '_text';
+        }
+
+        // 没有字典字段时返回空字符串，保持与原先 getList 完全一致的输出
+        if (empty($appendFields)) {
+            return '';
+        }
+
+        $fields = '';
+        foreach ($appendFields as $field) {
+            $fields .= "'" . $field . "', ";
+        }
+        $fields = rtrim($fields, ', ');
+
+        return '->append([' . $fields . '])';
+    }
+
+
+    /**
      * @notes 获取文件生成到模块的文件夹路径
      * @return string
      */
@@ -137,6 +169,16 @@ class ServiceGenerator extends BaseGenerator
             'type' => 'php',
             'content' => $this->content
         ];
+    }
+
+
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'PHP 后端', 'description' => '服务层'];
     }
 
 }

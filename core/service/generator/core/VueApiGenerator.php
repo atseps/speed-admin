@@ -54,7 +54,7 @@ class VueApiGenerator extends BaseGenerator
      */
     public function getModuleGenerateDir()
     {
-        $dir = $this->rootPath . 'web/src/api/';
+        $dir = $this->rootPath . 'web/src/api/' . $this->getLowerTableName() . '/';
         $this->checkDir($dir);
         return $dir;
     }
@@ -78,7 +78,7 @@ class VueApiGenerator extends BaseGenerator
      */
     public function getGenerateName()
     {
-        return $this->getLowerTableName() . '.ts';
+        return 'index.ts';
     }
 
 
@@ -93,6 +93,16 @@ class VueApiGenerator extends BaseGenerator
             'type' => 'ts',
             'content' => $this->content
         ];
+    }
+
+
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'Vue 前端', 'description' => '接口定义'];
     }
 
 

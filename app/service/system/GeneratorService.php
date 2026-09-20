@@ -254,7 +254,7 @@ class GeneratorService extends BaseService
             $zipFile = $generator->getDownloadUrl();
         }
 
-        return ['file' => $zipFile];
+        return ['file' => $zipFile, 'menu_type' => $tableData['menu_type']];
     }
 
     /**
@@ -269,6 +269,35 @@ class GeneratorService extends BaseService
             $table = $this->model->with(['table_column'])->whereIn('id', $id)->findOrEmpty()->toArray();
             $generator = app()->make(Generator::class);
             return $generator->preview($table);
+        } catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+
+    /**
+     * 预览生成目录
+     * @param array $params
+     * @return bool|array
+     */
+    public function previewPath(array $params)
+    {
+        try {
+            $table = [
+                'table_name' => $params['table_name'] ?? '',
+                'table_comment' => $params['table_comment'] ?? '',
+                'module_name' => $params['module_name'] ?? '',
+                'class_dir' => $params['class_dir'] ?? '',
+                'generate_type' => $params['generate_type'] ?? 0,
+                'delete_type' => $params['delete_type'] ?? 0,
+                'menu_type' => $params['menu_type'] ?? 0,
+                'menu_name' => $params['menu_name'] ?? '',
+                'menu_pid' => $params['menu_pid'] ?? 0,
+                'table_column' => []
+            ];
+            $generator = app()->make(Generator::class);
+            return $generator->previewPath($table);
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             return false;

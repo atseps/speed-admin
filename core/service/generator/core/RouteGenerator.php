@@ -98,4 +98,14 @@ class RouteGenerator extends BaseGenerator
     }
 
 
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'PHP 后端', 'description' => '路由'];
+    }
+
+
 }

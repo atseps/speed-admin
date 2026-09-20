@@ -10,74 +10,92 @@
     >
       <a-tabs v-model:activeKey="tabsKey" :animated="{ inkBar: true, tabPane: false }">
         <a-tab-pane :key="1" tab="生成配置">
-          <s-input
-            name="table_name"
-            label="表名称"
-            placeholder="请输入表名称"
-            v-model="form.table_name"
-          ></s-input>
-          <s-input
-            name="table_comment"
-            label="表描述"
-            placeholder="请输入表描述"
-            v-model="form.table_comment"
-          ></s-input>
-          <s-input
-            name="module_name"
-            label="应用目录"
-            v-model="form.module_name"
-            placeholder="请输入应用目录"
-            extra="生成文件所在应用"
-          />
-          <s-input
-            label="模块目录"
-            v-model="form.class_dir"
-            placeholder="请输入模块目录"
-            name="class_dir"
-          >
-            <template #extra>
-              生成文件所在目录名；例：填写test，则控制器文件生成在app/应用目录/controller/test文件夹下。
-            </template>
-          </s-input>
-          <s-radio-group
-            v-model="form.generate_type"
-            name="generate_type"
-            label="生成方式"
-            @change="onGenerateType"
-          >
-            <a-radio :value="0">压缩包下载</a-radio>
-            <a-radio :value="1">生成到模块</a-radio>
-          </s-radio-group>
-          <s-radio-group v-model="form.delete_type" name="delete_type" label="删除方式">
-            <a-radio :value="0">真删除</a-radio>
-            <a-radio :value="1">软删除</a-radio>
-          </s-radio-group>
-          <s-tree-select
-            label="父级菜单"
-            name="pid"
-            labelField="title"
-            :treeData="treeData"
-            placeholder="请选择父级菜单"
-            v-model="form.menu_pid"
-          />
-          <s-input
-            name="menu_name"
-            label="菜单名称"
-            v-model="form.menu_name"
-            placeholder="请输入菜单名称"
-          />
-          <s-radio-group
-            v-model="form.menu_type"
-            name="menu_type"
-            label="菜单构建"
-            extra="自动构建：自动执行生成菜单sql。手动添加：自行添加菜单。"
-          >
-            <a-radio :value="1">自动构建</a-radio>
-            <a-radio :value="0">手动添加</a-radio>
-          </s-radio-group>
+          <div class="config-wrap">
+            <s-input
+              name="table_name"
+              label="表名称"
+              placeholder="请输入表名称"
+              v-model="form.table_name"
+            ></s-input>
+            <s-input
+              name="table_comment"
+              label="表描述"
+              placeholder="请输入表描述"
+              v-model="form.table_comment"
+            ></s-input>
+            <s-input
+              name="module_name"
+              label="应用目录"
+              v-model="form.module_name"
+              placeholder="请输入应用目录"
+              extra="生成文件所在应用"
+            />
+            <s-input
+              label="模块目录"
+              v-model="form.class_dir"
+              placeholder="请输入模块目录"
+              name="class_dir"
+            >
+              <template #extra>
+                生成文件所在目录名；例：填写test，则控制器文件生成在app/应用目录/controller/test文件夹下。
+              </template>
+            </s-input>
+            <s-radio-group
+              v-model="form.generate_type"
+              name="generate_type"
+              label="生成方式"
+              @change="onGenerateType"
+            >
+              <a-radio :value="0">压缩包下载</a-radio>
+              <a-radio :value="1">生成到模块</a-radio>
+            </s-radio-group>
+            <s-radio-group v-model="form.delete_type" name="delete_type" label="删除方式">
+              <a-radio :value="0">真删除</a-radio>
+              <a-radio :value="1">软删除</a-radio>
+            </s-radio-group>
+            <s-tree-select
+              label="父级菜单"
+              name="pid"
+              labelField="title"
+              :treeData="treeData"
+              placeholder="请选择父级菜单"
+              v-model="form.menu_pid"
+            />
+            <s-input
+              name="menu_name"
+              label="菜单名称"
+              v-model="form.menu_name"
+              placeholder="请输入菜单名称"
+            />
+            <s-radio-group
+              v-model="form.menu_type"
+              name="menu_type"
+              label="菜单构建"
+              extra="自动构建：自动执行生成菜单sql。手动添加：自行添加菜单。"
+            >
+              <a-radio :value="1">自动构建</a-radio>
+              <a-radio :value="0">手动添加</a-radio>
+            </s-radio-group>
+            <!-- 仅在确认使用「生成到模块」后展示目录预览 -->
+            <div v-if="pathConfirmed" class="config-wrap__aside">
+              <path-preview :list="pathList" :loading="pathLoading" />
+            </div>
+          </div>
         </a-tab-pane>
         <a-tab-pane :key="2" tab="字段管理">
           <a-table :columns="columns" rowKey="id" :data-source="tableData" :pagination="false">
+            <template #headerCell="{ column }">
+              <template v-if="column.dataIndex === 'dict_type'">
+                <span>字典类型</span>
+                <a-tooltip placement="top">
+                  <template #title>
+                    <div>表单页中下拉框、单选框、复选框的选项数据</div>
+                    <div>列表页会将字段自动转换为字典名称显示</div>
+                  </template>
+                  <QuestionCircleOutlined class="dict-tip-icon" />
+                </a-tooltip>
+              </template>
+            </template>
             <template #bodyCell="{ column, record, index }">
               <template v-if="column.dataIndex === 'comment'">
                 <a-input class="w-40" v-model:value="record.comment"></a-input>
@@ -93,6 +111,7 @@
                 <a-select
                   class="w-full"
                   placeholder="请选择"
+                  allow-clear
                   v-model:value="record[column.dataIndex as string]"
                   :options="options[column.dataIndex as string]"
                 ></a-select>
@@ -125,8 +144,11 @@
 <script lang="ts" setup>
 import { getDictList } from "@/api/system/dict";
 import { getMenuList } from "@/api/system/menu";
-import { getEdit, update, deleteFiled } from "@/api/system/generator";
+import { getEdit, update, deleteFiled, previewPath } from "@/api/system/generator";
+import { PathPreview } from "./components";
 import { setFormValue } from "@/utils";
+import { useDebounceFn } from "@vueuse/core";
+import { QuestionCircleOutlined } from "@ant-design/icons-vue";
 import type { TableColumnProps } from "@/components/Table/types";
 import useGenerator from "./useGenerator";
 import { RadioChangeEvent } from "ant-design-vue"
@@ -214,7 +236,10 @@ const columns: TableColumnProps[] = [
   {
     title: "字典类型",
     dataIndex: "dict_type",
-    width: 200
+    width: 200,
+    customHeaderCell: () => ({
+      class: "dict-header"
+    })
   },
   {
     title: "操作",
@@ -303,6 +328,62 @@ const options = reactive<OptionType>({
 const loading = ref(false);
 const spinning = ref(false);
 
+/**
+ * 生成目录预览数据
+ */
+const pathList = ref<Recordable[]>([]);
+const pathLoading = ref(false);
+/** 是否已完成首次加载：仅首次从列表页进入时展示加载动画，避免后续表单变动时闪烁 */
+const pathLoaded = ref(false);
+/** 是否已确认使用「生成到模块」：该方式需二次确认，确认前不展示预览面板 */
+const pathConfirmed = ref(false);
+
+/**
+ * 刷新生成目录预览
+ */
+const refreshPath = async () => {
+  // 非生成到模块（或未确认）、关键字段为空时后端无法计算路径，直接清空展示
+  if (form.value.generate_type != 1 || !pathConfirmed.value || !form.value.table_name || !form.value.module_name) {
+    pathList.value = [];
+    return;
+  }
+  // 首次加载才展示加载动画，后续表单变动静默刷新
+  !pathLoaded.value && (pathLoading.value = true);
+  try {
+    const { data } = await previewPath({
+      table_name: form.value.table_name,
+      table_comment: form.value.table_comment,
+      module_name: form.value.module_name,
+      class_dir: form.value.class_dir,
+      generate_type: form.value.generate_type,
+      delete_type: form.value.delete_type,
+      menu_type: form.value.menu_type,
+      menu_name: form.value.menu_name,
+      menu_pid: form.value.menu_pid
+    });
+    pathList.value = data || [];
+  } catch {
+    pathList.value = [];
+  } finally {
+    pathLoading.value = false;
+    pathLoaded.value = true;
+  }
+};
+
+const debouncedRefreshPath = useDebounceFn(refreshPath, 400);
+
+
+watch(
+  () => [
+    form.value.table_name,
+    form.value.module_name,
+    form.value.class_dir,
+    form.value.generate_type
+  ],
+  () => debouncedRefreshPath(),
+  { deep: true, immediate: true }
+);
+
 onMounted(() => {
   getDictType();
   getTreeList();
@@ -331,10 +412,17 @@ const onGenerateType = (e:RadioChangeEvent) => {
     createConfirm({
       title: "温馨提示",
       content: '生成到模块方式如遇同名文件会覆盖旧文件，确定要选择此方式吗？',
+      onOk() {
+        pathConfirmed.value = true;
+        refreshPath();
+      },
       onCancel() {
         form.value.generate_type = 0
       }
     });
+  } else {
+    pathConfirmed.value = false;
+    pathList.value = [];
   }
 };
 
@@ -369,6 +457,7 @@ const loadData = () => {
     .then(({ data }) => {
       form.value = setFormValue(data, unref(form)) as typeof form.value;
       tableData.value = data.table_column;
+      pathConfirmed.value = form.value.generate_type == 1;
     })
     .finally(() => {
       loading.value = false;
@@ -400,6 +489,27 @@ const onSubmit = async (isGenerator?: boolean): Promise<any> => {
 </script>
 
 <style lang="less" scoped>
+
+.config-wrap {
+  position: relative;
+}
+
+.config-wrap__aside {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 340px;
+  padding: 16px;
+  //padding-bottom: 0;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
 :deep(.ant-form-item-extra) {
   font-size: 12px;
   color: #999999;
@@ -409,5 +519,11 @@ const onSubmit = async (isGenerator?: boolean): Promise<any> => {
 
 :deep(.ant-card-body) {
   margin-bottom: 50px;
+}
+
+.dict-tip-icon {
+  margin-left: 4px;
+  color: #999999;
+  cursor: help;
 }
 </style>

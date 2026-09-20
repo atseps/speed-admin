@@ -21,7 +21,8 @@ class ModelGenerator extends BaseGenerator
             '{USE}',
             '{SOFTDELETE_CONTENT}',
             '{TABLE_NAME}',
-            '{SEARCH_ARRT}'
+            '{SEARCH_ARRT}',
+            '{DICT_TEXT}'
         ];
 
         // 等待替换的内容
@@ -31,7 +32,8 @@ class ModelGenerator extends BaseGenerator
             $this->getUseContent(),
             $this->getSoftDeleteContent(),
             $this->getTableName(),
-            $this->getSearchArrtContent()
+            $this->getSearchArrtContent(),
+            $this->getDictTextContent()
         ];
 
         $templatePath = $this->getTemplatePath('model');
@@ -170,6 +172,44 @@ class ModelGenerator extends BaseGenerator
     }
 
 
+    /**
+     * @notes 获取字典文本获取器内容
+     * 只要字段配置了字典类型就生成，不限制组件类型
+     * 生成的获取器不参与编辑写库，仅供列表页直接把字典值转化成文本展示
+     * @return string
+     */
+    public function getDictTextContent()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (empty($column['dict_type'])) {
+                continue;
+            }
+            $needReplace = [
+                '{UPPER_CAMEL_NAME}',
+                '{FIELD}',
+                '{DICT_CODE}',
+                '{COLUMN_COMMENT}',
+            ];
+            $waitReplace = [
+                Str::studly($column['name']),
+                $column['name'],
+                $column['dict_type'],
+                $column['comment'],
+            ];
+            $templatePath = $this->getTemplatePath('dict_text');
+            if (!file_exists($templatePath)) {
+                continue;
+            }
+            $content .= $this->replaceFileData($needReplace, $waitReplace, $templatePath) . PHP_EOL;
+        }
+
+        if (!empty($content)) {
+            $content = substr($content, 0, -1);
+        }
+        return $content;
+    }
+
 
     /**
      * @notes 文件信息
@@ -182,6 +222,16 @@ class ModelGenerator extends BaseGenerator
             'type' => 'php',
             'content' => $this->content
         ];
+    }
+
+
+    /**
+     * @notes 文件说明信息
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => 'PHP 后端', 'description' => '模型'];
     }
 
 

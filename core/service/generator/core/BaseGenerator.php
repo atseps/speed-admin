@@ -79,6 +79,15 @@ abstract class BaseGenerator
     protected $generatorDir;
 
 
+    /**
+     * 是否仅预览模式
+     * 为 true 时 checkDir() 只校验路径不创建目录，
+     * 供「生成目录预览」使用，避免预览时在工程里留下空目录
+     * @var bool
+     */
+    protected $previewOnly = false;
+
+
     public function __construct()
     {
         $this->basePath = base_path();
@@ -90,12 +99,28 @@ abstract class BaseGenerator
 
 
     /**
+     * @notes 设置为仅预览模式：后续 checkDir() 不再创建目录
+     * @param bool $previewOnly
+     * @return $this
+     */
+    public function setPreviewOnly(bool $previewOnly = true)
+    {
+        $this->previewOnly = $previewOnly;
+        return $this;
+    }
+
+
+    /**
      * @notes 文件夹不存在则创建
      * @param string $path
      */
     public function checkDir(string $path)
     {
         $this->assertSafePath($path);
+        // 仅预览模式下只做安全校验，不落盘创建目录
+        if ($this->previewOnly) {
+            return;
+        }
         !is_dir($path) && mkdir($path, 0755, true);
     }
 
@@ -366,6 +391,43 @@ abstract class BaseGenerator
     public function replaceFileData($needReplace, $waitReplace, $template)
     {
         return str_replace($needReplace, $waitReplace, file_get_contents($template));
+    }
+
+
+    /**
+     * @notes 获取文件的完整生成路径（不创建目录、不写入文件）
+     * @return string 统一使用 / 分隔的展示路径
+     */
+    public function getGenerateFilePath(): string
+    {
+        return $this->toRelativePath($this->getModuleGenerateDir() . $this->getGenerateName());
+    }
+
+
+    /**
+     * @notes 把绝对路径转换为相对于项目根目录的路径，便于前端展示
+     * @param string $path
+     * @return string
+     */
+    protected function toRelativePath(string $path): string
+    {
+        $path = str_replace('\\', '/', $path);
+        $root = str_replace('\\', '/', $this->rootPath);
+        // 路径以项目根目录开头时，截掉根目录，只保留相对部分
+        if (str_starts_with($path, $root)) {
+            $path = substr($path, strlen($root));
+        }
+        return ltrim($path, '/');
+    }
+
+
+    /**
+     * @notes 文件说明信息（分组名 + 文件用途），供生成目录预览使用
+     * @return array
+     */
+    public function getFileDescription(): array
+    {
+        return ['group' => '其他', 'description' => ''];
     }
 
 

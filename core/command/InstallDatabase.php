@@ -60,6 +60,9 @@ class InstallDatabase extends Command
             $this->executeSqlFile($output);
             $this->verifyInstallation($config);
 
+            // 5. 生成随机JWT密钥写入 config/jwt.php
+            $this->generateJwtSecret();
+
             // 完成
             $output->writeln("\n<info>数据初始化成功！</info>");
             $output->writeln("<info>默认管理员账号：admin</info>");
@@ -275,6 +278,39 @@ class InstallDatabase extends Command
         }
     }
 
+
+    /**
+     * 生成随机JWT密钥并写入 config/jwt.php
+     */
+    protected function generateJwtSecret(): void
+    {
+        $configFile = app()->getRootPath() . 'config/jwt.php';
+        $content = file_get_contents($configFile);
+        if ($content === false) {
+            throw new \RuntimeException('未找到配置文件: ' . $configFile);
+        }
+
+        // 生成64位十六进制随机串
+        $secret = bin2hex(random_bytes(32));
+        $apiSecret = bin2hex(random_bytes(32));
+
+        // 1. 替换 default 段中 secret 
+        $content = preg_replace(
+            "/env\('JWT_SECRET',\s*'[A-Za-z0-9]*'\)/",
+            "env('JWT_SECRET', '{$secret}')",
+            $content
+        );
+
+        // 2. 替换 api 段 secret
+        $content = preg_replace(
+            "/'secret'\s*=>\s*'[A-Za-z0-9]*'/",
+            "'secret' => '{$apiSecret}'",
+            $content
+        );
+
+        file_put_contents($configFile, $content);
+
+    }
 
     /**
      * 显示进度条

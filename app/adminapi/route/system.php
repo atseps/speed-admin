@@ -53,7 +53,7 @@ Route::group(function () {
         Route::get('getAllTable', 'system.generator/getAllTable');
         //生成代码
         Route::post('makeCode/:id', 'system.generator/makeCode');
-        //预览生成文件
+        //预览生成目录
         Route::get('previewPath', 'system.generator/previewPath');
         //预览代码
         Route::get('preview/:id', 'system.generator/preview');

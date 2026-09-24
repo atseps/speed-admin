@@ -6,8 +6,9 @@
         <a href="https://atsep.top/web" target="_blank">演示</a> |
         <a href="https://atsep.top/docs" target="_blank">文档</a> |
         <a href="https://gitee.com/fantasyc/speed-admin" target="_blank">Gitee仓库</a> |
-        <a href="https://github.com/atseps/speed-admin" target="_blank">GitHub仓库</a>
-    </p>
+        <a href="https://github.com/atseps/speed-admin" target="_blank">GitHub仓库</a> |
+        <a href="https://atsep.top/docs/contact.html" target="_blank">联系我</a>
+   </p>
     <p align="center">
       <a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-8-8892bf"></a>
       <a href="https://www.tslang.cn/"><img src="https://img.shields.io/badge/TypeScript-4-294e80"></a>

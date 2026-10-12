@@ -80,14 +80,13 @@ export default defineConfig(({ mode }) => {
       }
     },
     // 生产环境打包配置
-    //去除 console debugger
     build: {
-      minify: "terser",
-      terserOptions: {
+      minify: 'oxc',
+      minifyOptions: {
         compress: {
-          drop_console: true,
-          drop_debugger: true
-        }
+          dropConsole: true,
+          dropDebugger: true,
+        },
       }
     },
     optimizeDeps: {

@@ -24,16 +24,19 @@
 
 ## 访问
 
-体验地址：[https://atsep.top/web](https://atsep.top/web) <br>
+体验地址：[https://atsep.top](https://atsep.top) <br>
 账号：demo 密码：123456<br>
 文档地址：[https://atsep.top/docs](https://atsep.top/docs)
 
 
 #### 基于SpeedAdmin开发的CRM
 项目地址：[https://gitee.com/fantasyc/speed-crm](https://gitee.com/fantasyc/speed-crm) <br>
-体验地址：[https://crm.atsep.top/web](https://crm.atsep.top/web) <br>
+体验地址：[https://crm.atsep.top](https://crm.atsep.top) <br>
 账号：demo 密码：123456<br>
 
+#### 基于SpeedAdmin开发的ERP
+体验地址：[https://erp.atsep.top](https://erp.atsep.top/web) <br>
+账号：demo 密码：123456<br>
 
 ## 🚀 快速开始
 
